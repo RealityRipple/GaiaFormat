@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "Inställningar för GaiaFormat">
+<!ENTITY standard.title "Standardformatering">
+<!ENTITY messages.title "Meddelanden att formatera">
+<!ENTITY extra.title "Ytterligare formatering">
+<!ENTITY prefix.label "Prefixtext:">
+<!ENTITY suffix.label "Suffixtext:">
+<!ENTITY leftkey.label "Vänster om tangent:">
+<!ENTITY rightkey.label "Höger om tangent:">
+<!ENTITY style.label "Format för foruminlägg:">
+<!ENTITY forum.label "Foruminlägg">
+<!ENTITY pm.label "Personliga meddelanden">
+<!ENTITY guild.label "Gilleinlägg">
+<!ENTITY comment.label "Kommentarer">
+<!ENTITY style.normal "Normalt">
+<!ENTITY style.whisper "Viska">
+<!ENTITY style.shout "Skrik">
+<!ENTITY style.think "Tänk">
+<!ENTITY style.document "Dokument">
+<!ENTITY style.ornate "Utsmyckat">
+<!ENTITY style.ghost "Ghost">
+<!ENTITY style.star "Star">
+<!ENTITY style.chain "Chain">
+<!ENTITY style.rainbow "Rainbow">
+<!ENTITY style.prism "Prism">
+<!ENTITY style.drippy "Drippy">
+<!ENTITY style.thorny "Thorny">
+<!ENTITY style.sakura "Sakura">
+<!ENTITY addcmd.label "Lägg till">
+<!ENTITY remcmd.label "Ta bort">
+<!ENTITY impcmd.label "Importera…">
+<!ENTITY expcmd.label "Exportera…">

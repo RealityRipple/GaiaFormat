@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "GaiaFormat-opties">
+<!ENTITY standard.title "Standaardopmaak">
+<!ENTITY messages.title "Op te maken berichten">
+<!ENTITY extra.title "Extra opmaak">
+<!ENTITY prefix.label "Voorafgaande tekst:">
+<!ENTITY suffix.label "Aansluitende tekst:">
+<!ENTITY leftkey.label "Toets links:">
+<!ENTITY rightkey.label "Toets rechts:">
+<!ENTITY style.label "Forumberichtstijl:">
+<!ENTITY forum.label "Forumberichten">
+<!ENTITY pm.label "Privéberichten">
+<!ENTITY guild.label "Gildeberichten">
+<!ENTITY comment.label "Opmerkingen">
+<!ENTITY style.normal "Normaal">
+<!ENTITY style.whisper "Fluisteren">
+<!ENTITY style.shout "Schreeuwen">
+<!ENTITY style.think "Denken">
+<!ENTITY style.document "Document">
+<!ENTITY style.ornate "Sierlijk">
+<!ENTITY style.ghost "Ghost">
+<!ENTITY style.star "Star">
+<!ENTITY style.chain "Chain">
+<!ENTITY style.rainbow "Rainbow">
+<!ENTITY style.prism "Prism">
+<!ENTITY style.drippy "Drippy">
+<!ENTITY style.thorny "Thorny">
+<!ENTITY style.sakura "Sakura">
+<!ENTITY addcmd.label "Toevoegen">
+<!ENTITY remcmd.label "Verwijderen">
+<!ENTITY impcmd.label "Importeren…">
+<!ENTITY expcmd.label "Exporteren…">

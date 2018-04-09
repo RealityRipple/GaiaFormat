@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "GaiaFormat Seçenekleri">
+<!ENTITY standard.title "Standart Biçimleme">
+<!ENTITY messages.title "Biçim Mesajları">
+<!ENTITY extra.title "Extra Biçimleme">
+<!ENTITY prefix.label "Önek Yazısı:">
+<!ENTITY suffix.label "Sonek Yazısı:">
+<!ENTITY leftkey.label "Sol Tuş:">
+<!ENTITY rightkey.label "Sağ Tuş:">
+<!ENTITY style.label "Forum Gönderme Stili:">
+<!ENTITY forum.label "Forum Gönerileri">
+<!ENTITY pm.label "Özel Mesajlar">
+<!ENTITY guild.label "Loca Gönderileri">
+<!ENTITY comment.label "Yorumlar">
+<!ENTITY style.normal "Normal">
+<!ENTITY style.whisper "Fısıltı">
+<!ENTITY style.shout "Çığlık">
+<!ENTITY style.think "Düşün">
+<!ENTITY style.document "Belge">
+<!ENTITY style.ornate "Süsle">
+<!ENTITY style.ghost "Ghost">
+<!ENTITY style.star "Star">
+<!ENTITY style.chain "Chain">
+<!ENTITY style.rainbow "Rainbow">
+<!ENTITY style.prism "Prism">
+<!ENTITY style.drippy "Drippy">
+<!ENTITY style.thorny "Thorny">
+<!ENTITY style.sakura "Sakura">
+<!ENTITY addcmd.label "Ekle">
+<!ENTITY remcmd.label "Kaldır">
+<!ENTITY impcmd.label "İçe Aktar...">
+<!ENTITY expcmd.label "Dışa Aktar...">

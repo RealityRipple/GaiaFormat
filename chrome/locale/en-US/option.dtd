@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "GaiaFormat Options">
+<!ENTITY standard.title "Standard Formatting">
+<!ENTITY messages.title "Messages to Format">
+<!ENTITY extra.title "Extra Formatting">
+<!ENTITY prefix.label "Prefix Text:">
+<!ENTITY suffix.label "Suffix Text:">
+<!ENTITY leftkey.label "Left Key:">
+<!ENTITY rightkey.label "Right Key:">
+<!ENTITY style.label "Forum Post Style:">
+<!ENTITY forum.label "Forum Posts">
+<!ENTITY pm.label "Private Messages">
+<!ENTITY guild.label "Guild Posts">
+<!ENTITY comment.label "Comments">
+<!ENTITY style.normal "Normal">
+<!ENTITY style.whisper "Whisper">
+<!ENTITY style.shout "Shout">
+<!ENTITY style.think "Think">
+<!ENTITY style.document "Document">
+<!ENTITY style.ornate "Ornate">
+<!ENTITY style.ghost "Ghost">
+<!ENTITY style.star "Star">
+<!ENTITY style.chain "Chain">
+<!ENTITY style.rainbow "Rainbow">
+<!ENTITY style.prism "Prism">
+<!ENTITY style.drippy "Drippy">
+<!ENTITY style.thorny "Thorny">
+<!ENTITY style.sakura "Sakura">
+<!ENTITY addcmd.label "Add">
+<!ENTITY remcmd.label "Remove">
+<!ENTITY impcmd.label "Import...">
+<!ENTITY expcmd.label "Export...">

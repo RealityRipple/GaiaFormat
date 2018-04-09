@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "Opções do GaiaFormat">
+<!ENTITY standard.title "Formatação padrão">
+<!ENTITY messages.title "Mensagens a formatar">
+<!ENTITY extra.title "Formatação Extra">
+<!ENTITY prefix.label "Prefixo:">
+<!ENTITY suffix.label "Sufixo:">
+<!ENTITY leftkey.label "Tecla da esquerda:">
+<!ENTITY rightkey.label "Tecla da direita:">
+<!ENTITY style.label "Estilo de postagens no fórum:">
+<!ENTITY forum.label "Postagens no fórum">
+<!ENTITY pm.label "Mensagens privadas">
+<!ENTITY guild.label "Postagens corporativas">
+<!ENTITY comment.label "Comentários">
+<!ENTITY style.normal "Normal">
+<!ENTITY style.whisper "Sussurro">
+<!ENTITY style.shout "Grito">
+<!ENTITY style.think "Pensamento">
+<!ENTITY style.document "Documento">
+<!ENTITY style.ornate "Enfeite">
+<!ENTITY style.ghost "Ghost">
+<!ENTITY style.star "Star">
+<!ENTITY style.chain "Chain">
+<!ENTITY style.rainbow "Rainbow">
+<!ENTITY style.prism "Prism">
+<!ENTITY style.drippy "Drippy">
+<!ENTITY style.thorny "Thorny">
+<!ENTITY style.sakura "Sakura">
+<!ENTITY addcmd.label "Acrescentar">
+<!ENTITY remcmd.label "Remover">
+<!ENTITY impcmd.label "Importar...">
+<!ENTITY expcmd.label "Exportar...">

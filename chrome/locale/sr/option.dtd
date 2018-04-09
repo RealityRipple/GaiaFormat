@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "GaiaFormat - опције">
+<!ENTITY standard.title "Стандардно обликовање">
+<!ENTITY messages.title "Поруке за обликовање">
+<!ENTITY extra.title "Посебно обликовање">
+<!ENTITY prefix.label "Префикс:">
+<!ENTITY suffix.label "Суфикс:">
+<!ENTITY leftkey.label "Дугме за леве:">
+<!ENTITY rightkey.label "Дугме за десно:">
+<!ENTITY style.label "Стил објављивања на форуму:">
+<!ENTITY forum.label "Теме у форуму">
+<!ENTITY pm.label "Приватне поруке">
+<!ENTITY guild.label "Теме у групама">
+<!ENTITY comment.label "Коментари">
+<!ENTITY style.normal "Нормално">
+<!ENTITY style.whisper "Шапат">
+<!ENTITY style.shout "Узвик">
+<!ENTITY style.think "Замишљеност">
+<!ENTITY style.document "Документ">
+<!ENTITY style.ornate "Нагиздан">
+<!ENTITY style.ghost "Ghost">
+<!ENTITY style.star "Star">
+<!ENTITY style.chain "Chain">
+<!ENTITY style.rainbow "Rainbow">
+<!ENTITY style.prism "Prism">
+<!ENTITY style.drippy "Drippy">
+<!ENTITY style.thorny "Thorny">
+<!ENTITY style.sakura "Sakura">
+<!ENTITY addcmd.label "Додај">
+<!ENTITY remcmd.label "Уклони">
+<!ENTITY impcmd.label "Увоз...">
+<!ENTITY expcmd.label "Извоз...">
