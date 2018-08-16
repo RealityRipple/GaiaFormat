@@ -3,7 +3,7 @@
  <Description about="urn:mozilla:install-manifest">
   <em:name>GaiaFormat</em:name>
   <em:id>{F4999074-2E3B-5531-8A05-0BA42DDB3A58}</em:id>
-  <em:version>2.3</em:version>
+  <em:version>2.4</em:version>
   <em:type>2</em:type>
   <!-- Firefox -->
   <em:targetApplication>
@@ -26,7 +26,7 @@
    <Description>
     <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
     <em:minVersion>25.0a1pre</em:minVersion>
-    <em:maxVersion>27.*</em:maxVersion>
+    <em:maxVersion>28.*</em:maxVersion>
    </Description>
   </em:targetApplication>
   <em:description>An enhanced text formatter for GaiaOnline Forums, Private Messages, Guilds, and Profile comments.</em:description>
