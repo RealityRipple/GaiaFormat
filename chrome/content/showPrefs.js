@@ -10,8 +10,8 @@ window.com.RealityRipple.GaiaFormatPrefDisp = function()
 
  pub.Listen = function()
  {
-  window.removeEventListener('load', window.com.RealityRipple.GaiaFormatPrefDisp.Listen, false);
-  gBrowser.addProgressListener(window.com.RealityRipple.GaiaFormatPrefDisp.Listener);
+  window.removeEventListener('load', pub.Listen, false);
+  gBrowser.addProgressListener(pub.Listener);
  }
 
  pub.URL = function(winLoc)
@@ -20,7 +20,7 @@ window.com.RealityRipple.GaiaFormatPrefDisp = function()
   {
    if (winLoc.substr(winLoc.indexOf('#'), 19) == "#gaiaformat/options")
    {
-    priv.timer.init(window.com.RealityRipple.GaiaFormatPrefDisp.event, 250, priv.TIMER_ONE_SHOT);  
+    priv.timer.init(pub.event, 250, priv.TIMER_ONE_SHOT);  
    }
   }
  }
@@ -49,7 +49,7 @@ window.com.RealityRipple.GaiaFormatPrefDisp = function()
   onLocationChange: function(aProgress, aRequest, aURI)
   {
    if (aURI != null)
-    window.com.RealityRipple.GaiaFormatPrefDisp.URL(aURI.spec);
+    pub.URL(aURI.spec);
   },
   onStateChange: function() {},
   onProgressChange: function() {},

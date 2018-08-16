@@ -183,7 +183,7 @@ window.com.RealityRipple.GaiaFormat = function()
                     "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
        insertElement = priv.contentDoc().createElement('span');
        insertElement.setAttribute("style","margin: 12px 15px 0px 15px; font-size: 11px; vertical-align: middle; display: inline-block;");
-       submit_find.addEventListener("click", window.com.RealityRipple.GaiaFormat.AutoFormat, true);
+       submit_find.addEventListener("click", pub.AutoFormat, true);
        httpRequest.register();
       }
       else
@@ -233,7 +233,7 @@ window.com.RealityRipple.GaiaFormat = function()
     {
      var autoArea = priv.getBox();
      var autoAreaForm = autoArea.form;
-     autoAreaForm.addEventListener("submit", window.com.RealityRipple.GaiaFormat.AutoFormat, true);
+     autoAreaForm.addEventListener("submit", pub.AutoFormat, true);
     }
     catch(e){}
    }
@@ -246,13 +246,13 @@ window.com.RealityRipple.GaiaFormat = function()
  }
  pub.standardLoad = function()
  {
-  window.addEventListener('DOMContentLoaded', window.com.RealityRipple.GaiaFormat.pagegrabber_start,false);
+  window.addEventListener('DOMContentLoaded', pub.pagegrabber_start,false);
  }
  priv.buffer = null;
  pub.tablselect = function(event)
  {
   priv.buffer = gBrowser.getBrowserAtIndex(gBrowser.mTabContainer.selectedIndex);
-  setTimeout(window.com.RealityRipple.GaiaFormat.bufferLoad, 155);
+  setTimeout(pub.bufferLoad, 155);
  }
  pub.bufferLoad = function()
  {
@@ -261,7 +261,7 @@ window.com.RealityRipple.GaiaFormat = function()
  }
  pub.reLoad = function()
  {
-  gBrowser.mPanelContainer.addEventListener("select", window.com.RealityRipple.GaiaFormat.tablselect, false);
+  gBrowser.mPanelContainer.addEventListener("select", pub.tablselect, false);
  }
  priv.isGaia = function()
  {

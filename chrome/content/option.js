@@ -70,8 +70,8 @@ com.RealityRipple.GaiaFormatDialog = function()
     "ExtraItem": []};
    document.getElementById("cmbFormat").appendItem(newName.value, retID);
    priv.selLastFormat();
-   com.RealityRipple.GaiaFormatDialog.showFormat();
-   com.RealityRipple.GaiaFormatDialog.SelectExtra();
+   pub.showFormat();
+   pub.SelectExtra();
   }
  }
 
@@ -96,8 +96,8 @@ com.RealityRipple.GaiaFormatDialog = function()
     cmbFormat.removeItemAt(cmbFormat.selectedIndex);
     delete priv.format[retID];
     priv.selLastFormat();
-    com.RealityRipple.GaiaFormatDialog.showFormat();
-    com.RealityRipple.GaiaFormatDialog.SelectExtra();
+    pub.showFormat();
+    pub.SelectExtra();
    }
   }
  }
@@ -136,7 +136,7 @@ com.RealityRipple.GaiaFormatDialog = function()
    {
     document.getElementById("lstExtras").appendItem(myFormat.ExtraItem[i].Left + priv.lclSpecial + myFormat.ExtraItem[i].Right);
    }
-   com.RealityRipple.GaiaFormatDialog.SelectExtra();
+   pub.SelectExtra();
   }
   else
   {
@@ -160,7 +160,7 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("chkExtra").checked = false;
    while(document.getElementById("lstExtras").getRowCount() != 0)
     document.getElementById("lstExtras").removeItemAt(0);
-   com.RealityRipple.GaiaFormatDialog.SelectExtra();
+   pub.SelectExtra();
   }
  }
 
@@ -242,7 +242,7 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("txtEBegin").value = '';
    document.getElementById("txtEEnd").value = '';
   }
-  com.RealityRipple.GaiaFormatDialog.SelectExtra();
+  pub.SelectExtra();
  }
  
  pub.SelectExtra = function()
@@ -263,7 +263,7 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("txtEBegin").value  = '';
    document.getElementById("txtEEnd").value    = '';
   }
-  com.RealityRipple.GaiaFormatDialog.postCheck();
+  pub.postCheck();
  }
  
  pub.save = function()
@@ -484,7 +484,7 @@ com.RealityRipple.GaiaFormatDialog = function()
     if (iFound == -1)
      iFound = 0;
     document.getElementById("cmbFormat").selectedIndex = iFound;
-    com.RealityRipple.GaiaFormatDialog.showFormat();
+    pub.showFormat();
    }
    else
    {
@@ -543,7 +543,7 @@ com.RealityRipple.GaiaFormatDialog = function()
      }
     }
     document.getElementById("cmbFormat").selectedIndex = 0;
-    com.RealityRipple.GaiaFormatDialog.showFormat();
+    pub.showFormat();
    }
   }
   catch(e)
@@ -562,7 +562,7 @@ com.RealityRipple.GaiaFormatDialog = function()
      "ExtraItems": 0,
      "ExtraItem": []};
    document.getElementById("cmbFormat").selectedIndex = 0;
-   com.RealityRipple.GaiaFormatDialog.showFormat();
+   pub.showFormat();
   }
  }
 
@@ -578,7 +578,7 @@ com.RealityRipple.GaiaFormatDialog = function()
   myFormat.Style = document.getElementById("cmbStyle").value;
   myFormat.Extras = document.getElementById("chkExtra").checked;
   
-  com.RealityRipple.GaiaFormatDialog.postCheck();
+  pub.postCheck();
  }
 
  pub.postCheck = function()
@@ -617,8 +617,8 @@ com.RealityRipple.GaiaFormatDialog = function()
     lines.push(line.value);
    stream.close();
    priv.xml.reader.parseFromString(lines.join("\n\r"), "text/xml");
-   com.RealityRipple.GaiaFormatDialog.showFormat();
-   com.RealityRipple.GaiaFormatDialog.SelectExtra();
+   pub.showFormat();
+   pub.SelectExtra();
   }
  }
 
@@ -775,9 +775,9 @@ com.RealityRipple.GaiaFormatDialog = function()
     document.getElementById("lstExtras").appendItem(myFormat.ExtraItem[i].Left + priv.lclSpecial + myFormat.ExtraItem[i].Right);
    }
    document.getElementById("lstExtras").selectedIndex = 0;
-   com.RealityRipple.GaiaFormatDialog.SelectExtra();
+   pub.SelectExtra();
   }
-  com.RealityRipple.GaiaFormatDialog.postCheck();
+  pub.postCheck();
   priv.Prompts.alert(null,'GaiaFormat',priv.lclAlrtImp);
  }
 
