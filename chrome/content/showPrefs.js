@@ -1,42 +1,32 @@
-if (!window.com) window.com = {};
-if (!window.com.RealityRipple) window.com.RealityRipple = {};
-window.com.RealityRipple.GaiaFormatPrefDisp = function()
+var GaiaFormatPrefDisp =
 {
- var pub = {};
- var priv = {};
-
- priv.timer = Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer);
- priv.TIMER_ONE_SHOT = Components.interfaces.nsITimer.TYPE_ONE_SHOT;
-
- pub.Listen = function()
+ _timer: Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer),
+ Listen: function()
  {
-  window.removeEventListener('load', pub.Listen, false);
-  gBrowser.addProgressListener(pub.Listener);
- }
-
- pub.URL = function(winLoc)
+  window.removeEventListener('load', GaiaFormatPrefDisp.Listen, false);
+  gBrowser.addProgressListener(GaiaFormatPrefDisp.Listener);
+ },
+ URL: function(winLoc)
  {
   if (winLoc.indexOf('#') > -1)
   {
    if (winLoc.substr(winLoc.indexOf('#'), 19) == "#gaiaformat/options")
    {
-    priv.timer.init(pub.event, 250, priv.TIMER_ONE_SHOT);  
+    GaiaFormatPrefDisp._timer.init(GaiaFormatPrefDisp.event, 250, Components.interfaces.nsITimer.TYPE_ONE_SHOT);  
    }
   }
- }
-
- pub.event =
+ },
+ event:
  {
   observe: function(subject, topic, data)
   {
    if (window.content.document.getElementById('optionsGaiaFormat'))
     window.content.document.getElementById('optionsGaiaFormat').src = 'about:blank';
    window.openDialog('chrome://gaiaformat/content/option.xul', '', 'chrome,titlebar,toolbar,centerscreen,modal');
-   priv.timer.cancel();
+   GaiaFormatPrefDisp._timer.cancel();
   }
- }
-
- pub.Listener =
+ },
+ Listener:
  {
   QueryInterface: function(aIID)
   {
@@ -49,16 +39,13 @@ window.com.RealityRipple.GaiaFormatPrefDisp = function()
   onLocationChange: function(aProgress, aRequest, aURI)
   {
    if (aURI != null)
-    pub.URL(aURI.spec);
+    GaiaFormatPrefDisp.URL(aURI.spec);
   },
   onStateChange: function() {},
   onProgressChange: function() {},
   onStatusChange: function() {},
   onSecurityChange: function() {},
   onLinkIconAvailable: function() {}
- };	
-
- return pub;
-}();
-
-window.addEventListener('load', window.com.RealityRipple.GaiaFormatPrefDisp.Listen, false);
+ }
+};
+window.addEventListener('load', GaiaFormatPrefDisp.Listen, false);

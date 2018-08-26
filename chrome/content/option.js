@@ -1,61 +1,65 @@
-if (!com) var com = {};
-if (!com.RealityRipple) com.RealityRipple = {};
-com.RealityRipple.GaiaFormatDialog = function()
+var GaiaFormatDialog =
 {
- var pub  = {};
- var priv = {};
-
- priv.Prefs  = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.gaiaformat.");
- priv.Syncs  = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("services.sync.prefs.sync.extensions.gaiaformat.");
- priv.format = new Array();
- priv.fIndex = 0;
-
- priv.xml = {};
- priv.xml.reader  = Components.classes["@mozilla.org/saxparser/xmlreader;1"].createInstance(Components.interfaces.nsISAXXMLReader);
- priv.xml.ctnr    = '';
- priv.xml.parsing = false;
- priv.xml.element = '';
- priv.xml.attrs = {};
- priv.xml.attrs.n = new Array();
- priv.xml.attrs.v = new Array();
- priv.xml.value   = '';
- priv.xml.EItem = 0;
-
- priv.Prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
- priv.gBundle        = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
- priv.locale         = priv.gBundle.createBundle("chrome://gaiaformat/locale/gaiaformat.properties");
- priv.lclPrefix      = "[color=green][align=left]--Personalize this formatting--[/align][/color][align=center]\n";
- priv.lclSuffix      = "\n[/align][color=green][align=right]--Customize it in Tools > Add-Ons > Extensions > GaiaFormat > Options--[/align][/color]";
- priv.lclSpecial     = priv.locale.GetStringFromName("specialtext.label");
- priv.lclAlrtExp     = priv.locale.GetStringFromName("alert.exported");
- priv.lclAlrtExpFail = priv.locale.GetStringFromName("alert.expfail");
- priv.lclAlrtImp     = priv.locale.GetStringFromName("alert.imported");
- priv.lclAlrtUnsafe  = priv.locale.GetStringFromName("alert.unsafe");
- priv.lclAlrtUnShow  = priv.locale.GetStringFromName("alert.unsafe.show");
- priv.lclAlrtNewFT   = priv.locale.GetStringFromName("alert.newformat.title");
- priv.lclAlrtNewF    = priv.locale.GetStringFromName("alert.newformat.value");
- priv.lclAlrtNewFN   = priv.locale.GetStringFromName("alert.newformat.name");
- priv.lclAlrtRemFT   = priv.locale.GetStringFromName("alert.remformat.title");
- priv.lclAlrtRemF    = priv.locale.GetStringFromName("alert.remformat.value");
- priv.formatCount = function()
+ _Prefs:   Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.gaiaformat."),
+ _Syncs:   Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("services.sync.prefs.sync.extensions.gaiaformat."),
+ _Prompts: Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService),
+ _format: [],
+ _fIndex: 0,
+ _xml_reader:  Components.classes["@mozilla.org/saxparser/xmlreader;1"].createInstance(Components.interfaces.nsISAXXMLReader),
+ _xml_ctnr:    '',
+ _xml_parsing: false,
+ _xml_element: '',
+ _xml_attr_n:  [],
+ _xml_attr_v:  [],
+ _xml_value:   '',
+ _xml_EItem:   0,
+ _lclPrefix:      "[color=green][align=left]--Personalize this formatting--[/align][/color][align=center]\n",
+ _lclSuffix:      "\n[/align][color=green][align=right]--Customize it in Tools > Add-Ons > Extensions > GaiaFormat > Options--[/align][/color]",
+ _lclSpecial:     '',
+ _lclAlrtExp:     '',
+ _lclAlrtExpFail: '',
+ _lclAlrtImp:     '',
+ _lclAlrtUnsafe:  '',
+ _lclAlrtUnShow:  '',
+ _lclAlrtNewFT:   '',
+ _lclAlrtNewF:    '',
+ _lclAlrtNewFN:   '',
+ _lclAlrtRemFT:   '',
+ _lclAlrtRemF:    '',
+ loadLocales: function()
  {
+  var locale = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService).createBundle("chrome://gaiaformat/locale/gaiaformat.properties");
+  GaiaFormatDialog._lclSpecial =     locale.GetStringFromName("specialtext.label");
+  GaiaFormatDialog._lclAlrtExp =     locale.GetStringFromName("alert.exported");
+  GaiaFormatDialog._lclAlrtExpFail = locale.GetStringFromName("alert.expfail");
+  GaiaFormatDialog._lclAlrtImp =     locale.GetStringFromName("alert.imported");
+  GaiaFormatDialog._lclAlrtUnsafe =  locale.GetStringFromName("alert.unsafe");
+  GaiaFormatDialog._lclAlrtUnShow =  locale.GetStringFromName("alert.unsafe.show");
+  GaiaFormatDialog._lclAlrtNewFT =   locale.GetStringFromName("alert.newformat.title");
+  GaiaFormatDialog._lclAlrtNewF =    locale.GetStringFromName("alert.newformat.value");
+  GaiaFormatDialog._lclAlrtNewFN =   locale.GetStringFromName("alert.newformat.name");
+  GaiaFormatDialog._lclAlrtRemFT =   locale.GetStringFromName("alert.remformat.title");
+  GaiaFormatDialog._lclAlrtRemF =    locale.GetStringFromName("alert.remformat.value");
+ },
+ _formatCount: function()
+ {
+  var i = 0;
   var idx = 0;
-  for (var i in priv.format)
+  for (i in GaiaFormatDialog._format)
   {
    idx++;
   }
   return idx;
- }
-
- pub.newFormat = function()
+ },
+ newFormat: function()
  {
-  var newName = {value: priv.lclAlrtNewFN};
-  var result = priv.Prompts.prompt(null, priv.lclAlrtNewFT, priv.lclAlrtNewF, newName, null, {value: false});
+  var newName = {value: GaiaFormatDialog._lclAlrtNewFN};
+  var result = GaiaFormatDialog._Prompts.prompt(null, GaiaFormatDialog._lclAlrtNewFT, GaiaFormatDialog._lclAlrtNewF, newName, null, {value: false});
   if (result)
   {
-   var retID = newName.value.toLowerCase() + priv.formatCount();
+   var retID = newName.value.toLowerCase() + GaiaFormatDialog._formatCount();
    retID = retID.replace(' ', '_');
-   priv.format[retID] = {
+   GaiaFormatDialog._format[retID] = {
     "name": newName.value,
     "id": retID,
     "Type_Forum": true,
@@ -69,13 +73,12 @@ com.RealityRipple.GaiaFormatDialog = function()
     "ExtraItems": 0,
     "ExtraItem": []};
    document.getElementById("cmbFormat").appendItem(newName.value, retID);
-   priv.selLastFormat();
-   pub.showFormat();
-   pub.SelectExtra();
+   GaiaFormatDialog._selLastFormat();
+   GaiaFormatDialog.showFormat();
+   GaiaFormatDialog.SelectExtra();
   }
- }
-
- pub.remFormat = function()
+ },
+ remFormat: function()
  {
   var cmbFormat = document.getElementById("cmbFormat");
   if (cmbFormat.selectedIndex > -1)
@@ -90,29 +93,28 @@ com.RealityRipple.GaiaFormatDialog = function()
    {
     retStr = cmbFormat.label;
    }
-   var result = !priv.Prompts.confirmEx(null, priv.lclAlrtRemFT, priv.lclAlrtRemF.replace('%1', retStr), priv.Prompts.STD_YES_NO_BUTTONS, null, null, null, null, {value: false});
+   var result = !GaiaFormatDialog._Prompts.confirmEx(null, GaiaFormatDialog._lclAlrtRemFT, GaiaFormatDialog._lclAlrtRemF.replace('%1', retStr), GaiaFormatDialog._Prompts.STD_YES_NO_BUTTONS, null, null, null, null, {value: false});
    if (result)
    {
     cmbFormat.removeItemAt(cmbFormat.selectedIndex);
-    delete priv.format[retID];
-    priv.selLastFormat();
-    pub.showFormat();
-    pub.SelectExtra();
+    delete GaiaFormatDialog._format[retID];
+    GaiaFormatDialog._selLastFormat();
+    GaiaFormatDialog.showFormat();
+    GaiaFormatDialog.SelectExtra();
    }
   }
- }
-
- pub.showFormat = function()
+ },
+ showFormat: function()
  {
   var cmbFormat = document.getElementById("cmbFormat");
   if (cmbFormat.selectedIndex > -1)
   {
-   priv.fIndex = cmbFormat.selectedItem.value;
-   if (priv.fIndex == null)
+   GaiaFormatDialog._fIndex = cmbFormat.selectedItem.value;
+   if (GaiaFormatDialog._fIndex == null)
    {
-    priv.fIndex = cmbFormat.value;
+    GaiaFormatDialog._fIndex = cmbFormat.value;
    }
-   var myFormat = priv.format[priv.fIndex];
+   var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
    document.getElementById("cmbFormat").disabled = false;
    document.getElementById("chkForum").disabled = false;
    document.getElementById("chkGuild").disabled = false;
@@ -134,13 +136,13 @@ com.RealityRipple.GaiaFormatDialog = function()
     document.getElementById("lstExtras").removeItemAt(0);
    for (var i = 0; i < myFormat.ExtraItems; i++)
    {
-    document.getElementById("lstExtras").appendItem(myFormat.ExtraItem[i].Left + priv.lclSpecial + myFormat.ExtraItem[i].Right);
+    document.getElementById("lstExtras").appendItem(myFormat.ExtraItem[i].Left + GaiaFormatDialog._lclSpecial + myFormat.ExtraItem[i].Right);
    }
-   pub.SelectExtra();
+   GaiaFormatDialog.SelectExtra();
   }
   else
   {
-   priv.fIndex = 'none';
+   GaiaFormatDialog._fIndex = 'none';
    document.getElementById("cmbFormat").disabled = true;
    document.getElementById("chkForum").disabled = true;
    document.getElementById("chkGuild").disabled = true;
@@ -160,11 +162,10 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("chkExtra").checked = false;
    while(document.getElementById("lstExtras").getRowCount() != 0)
     document.getElementById("lstExtras").removeItemAt(0);
-   pub.SelectExtra();
+   GaiaFormatDialog.SelectExtra();
   }
- }
-
- priv.selLastFormat = function()
+ },
+ _selLastFormat: function()
  {
   var cmbFormat = document.getElementById("cmbFormat");
   if (cmbFormat.itemCount == null)
@@ -189,31 +190,29 @@ com.RealityRipple.GaiaFormatDialog = function()
     cmbFormat.selectedIndex = -1;
    }
   }
- }
-
- pub.AddExtra = function(sLeft, sRight, sBegin, sEnd)
+ },
+ AddExtra: function(sLeft, sRight, sBegin, sEnd)
  {
-  var myFormat = priv.format[priv.fIndex];
+  var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
   myFormat.ExtraItems++;
   myFormat.ExtraItem[myFormat.ExtraItems - 1] = {
    "Left": sLeft,
    "Right": sRight,
    "Begin": sBegin,
    "End": sEnd};
-  document.getElementById("lstExtras").appendItem(sLeft + priv.lclSpecial + sRight);
- }
- 
- pub.SetExtra = function()
+  document.getElementById("lstExtras").appendItem(sLeft + GaiaFormatDialog._lclSpecial + sRight);
+ },
+ SetExtra: function()
  {
   var i = document.getElementById("lstExtras").selectedIndex;
   if (i >= 0)
   {
-   var myFormat = priv.format[priv.fIndex];
+   var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
    myFormat.ExtraItem[i].Left = document.getElementById("txtELeft").value;
    myFormat.ExtraItem[i].Right = document.getElementById("txtERight").value;
    myFormat.ExtraItem[i].Begin = document.getElementById("txtEBegin").value;
-   myFormat.ExtraItem[i].End   = document.getElementById("txtEEnd").value
-   document.getElementById("lstExtras").selectedItem.label = myFormat.ExtraItem[i].Left + priv.lclSpecial + myFormat.ExtraItem[i].Right;
+   myFormat.ExtraItem[i].End   = document.getElementById("txtEEnd").value;
+   document.getElementById("lstExtras").selectedItem.label = myFormat.ExtraItem[i].Left + GaiaFormatDialog._lclSpecial + myFormat.ExtraItem[i].Right;
   }
   else
   {
@@ -222,16 +221,15 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("txtEBegin").value  = '';
    document.getElementById("txtEEnd").value    = '';
   }
- }
- 
- pub.RemoveExtra = function()
+ },
+ RemoveExtra: function()
  {
   var i = document.getElementById("lstExtras").selectedIndex;
-  var myFormat = priv.format[priv.fIndex];
+  var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
   if(myFormat.ExtraItems > 0 && i >= 0)
   {
    myFormat.ExtraItems--;
-   myFormat.ExtraItem.splice(i,1)
+   myFormat.ExtraItem.splice(i, 1);
    document.getElementById("lstExtras").removeItemAt(i);
    document.getElementById("lstExtras").selectedIndex = i - 1;
   }
@@ -242,15 +240,14 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("txtEBegin").value = '';
    document.getElementById("txtEEnd").value = '';
   }
-  pub.SelectExtra();
- }
- 
- pub.SelectExtra = function()
+  GaiaFormatDialog.SelectExtra();
+ },
+ SelectExtra: function()
  {
   var i = document.getElementById("lstExtras").selectedIndex;
   if(i >= 0)
   {
-   var myFormat = priv.format[priv.fIndex];
+   var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
    document.getElementById("txtELeft").value   = myFormat.ExtraItem[i].Left;
    document.getElementById("txtERight").value  = myFormat.ExtraItem[i].Right;
    document.getElementById("txtEBegin").value  = myFormat.ExtraItem[i].Begin;
@@ -263,131 +260,132 @@ com.RealityRipple.GaiaFormatDialog = function()
    document.getElementById("txtEBegin").value  = '';
    document.getElementById("txtEEnd").value    = '';
   }
-  pub.postCheck();
- }
- 
- pub.save = function()
+  GaiaFormatDialog.postCheck();
+ },
+ save: function()
  {
+  var i = 0;
+  var j = 0;
   var oldFCount = 0;
-  try{oldFCount = priv.Prefs.getIntPref("Formats");}
+  try{oldFCount = GaiaFormatDialog._Prefs.getIntPref("Formats");}
   catch (e){oldFCount = 0;}
-  if (oldFCount > priv.formatCount())
+  if (oldFCount > GaiaFormatDialog._formatCount())
   {
-   for (var i = 0; i < oldFCount; i++)
+   for (i = 0; i < oldFCount; i++)
    {
-    priv.Prefs.deleteBranch("Format[" + i + "].name");
-    priv.Prefs.deleteBranch("Format[" + i + "].id");
-    priv.Prefs.deleteBranch("Format[" + i + "].Type.Forum");
-    priv.Prefs.deleteBranch("Format[" + i + "].Type.Guild");
-    priv.Prefs.deleteBranch("Format[" + i + "].Type.PM");
-    priv.Prefs.deleteBranch("Format[" + i + "].Type.Comm");
-    priv.Prefs.deleteBranch("Format[" + i + "].Style");
-    priv.Prefs.deleteBranch("Format[" + i + "].Extras");
-    priv.Prefs.deleteBranch("Format[" + i + "].Begin");
-    priv.Prefs.deleteBranch("Format[" + i + "].End");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].name");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].id");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.Forum");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.Guild");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.PM");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.Comm");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Style");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Extras");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Begin");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].End");
 
-    priv.Syncs.deleteBranch("Format[" + i + "].name");
-    priv.Syncs.deleteBranch("Format[" + i + "].id");
-    priv.Syncs.deleteBranch("Format[" + i + "].Type.Forum");
-    priv.Syncs.deleteBranch("Format[" + i + "].Type.Guild");
-    priv.Syncs.deleteBranch("Format[" + i + "].Type.PM");
-    priv.Syncs.deleteBranch("Format[" + i + "].Type.Comm");
-    priv.Syncs.deleteBranch("Format[" + i + "].Style");
-    priv.Syncs.deleteBranch("Format[" + i + "].Extras");
-    priv.Syncs.deleteBranch("Format[" + i + "].Begin");
-    priv.Syncs.deleteBranch("Format[" + i + "].End");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].name");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].id");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.Forum");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.Guild");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.PM");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.Comm");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Style");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Extras");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Begin");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].End");
     var eItems = 0;
-    try{eItems = priv.Prefs.getIntPref("Format[" + i + "].Extras.Items");}
+    try{eItems = GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Extras.Items");}
     catch (e){eItems = 0;}
     if (eItems > 0)
     {
-     for (var j = 0; j < eItems; j++)
-     priv.Prefs.deleteBranch("Format[" + i + "].Extras.Left[" + j + "]");
-     priv.Prefs.deleteBranch("Format[" + i + "].Extras.Right[" + j + "]");
-     priv.Prefs.deleteBranch("Format[" + i + "].Extras.Begin[" + j + "]");
-     priv.Prefs.deleteBranch("Format[" + i + "].Extras.End[" + j + "]");
+     for (j = 0; j < eItems; j++)
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Extras.Left[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Extras.Right[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Extras.Begin[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Extras.End[" + j + "]");
 
-     priv.Syncs.deleteBranch("Format[" + i + "].Extras.Left[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + i + "].Extras.Right[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + i + "].Extras.Begin[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + i + "].Extras.End[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Extras.Left[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Extras.Right[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Extras.Begin[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Extras.End[" + j + "]");
     }
     else
     {
-     priv.Prefs.deleteBranch("Format[" + i + "].Extras.Items");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Extras.Items");
 
-     priv.Syncs.deleteBranch("Format[" + i + "].Extras.Items");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Extras.Items");
     }
    }
   }
-  priv.Prefs.setIntPref("Formats", priv.formatCount());
-  priv.Prefs.setCharPref("Favored", priv.fIndex);
+  GaiaFormatDialog._Prefs.setIntPref("Formats", GaiaFormatDialog._formatCount());
+  GaiaFormatDialog._Prefs.setCharPref("Favored", GaiaFormatDialog._fIndex);
   var idx = 0;
-  for (var i in priv.format)
+  for (i in GaiaFormatDialog._format)
   {
-   var itm = priv.format[i];
-   priv.Prefs.setCharPref("Format[" + idx + "].name", itm.name);
-   priv.Prefs.setCharPref("Format[" + idx + "].id", itm.id);
-   priv.Prefs.setBoolPref("Format[" + idx + "].Type.Forum", itm.Type_Forum);
-   priv.Prefs.setBoolPref("Format[" + idx + "].Type.Guild", itm.Type_Guild);
-   priv.Prefs.setBoolPref("Format[" + idx + "].Type.PM", itm.Type_PM);
-   priv.Prefs.setBoolPref("Format[" + idx + "].Type.Comm", itm.Type_Comm);
-   priv.Prefs.setIntPref("Format[" + idx + "].Style", itm.Style);
-   priv.Prefs.setBoolPref("Format[" + idx + "].Extras", itm.Extras);
-   priv.Prefs.setCharPref("Format[" + idx + "].Begin", encodeURIComponent(itm.Begin));
-   priv.Prefs.setCharPref("Format[" + idx + "].End",   encodeURIComponent(itm.End));
+   var itm = GaiaFormatDialog._format[i];
+   GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].name", itm.name);
+   GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].id", itm.id);
+   GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.Forum", itm.Type_Forum);
+   GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.Guild", itm.Type_Guild);
+   GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.PM", itm.Type_PM);
+   GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.Comm", itm.Type_Comm);
+   GaiaFormatDialog._Prefs.setIntPref("Format[" + idx + "].Style", itm.Style);
+   GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Extras", itm.Extras);
+   GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].Begin", encodeURIComponent(itm.Begin));
+   GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].End",   encodeURIComponent(itm.End));
 
-   priv.Syncs.setBoolPref("Format[" + idx + "].name", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].id", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Type.Forum", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Type.Guild", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Type.PM", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Type.Comm", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Style", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Extras", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Begin", true);
-   priv.Syncs.setBoolPref("Format[" + idx + "].End",   true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].name", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].id", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.Forum", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.Guild", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.PM", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.Comm", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Style", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Extras", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Begin", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].End",   true);
    var oldCount = 0;
-   try{oldCount = priv.Prefs.getIntPref("Format[" + idx + "].Extras.Items");}
+   try{oldCount = GaiaFormatDialog._Prefs.getIntPref("Format[" + idx + "].Extras.Items");}
    catch (e){oldCount = 0;}
    if(oldCount > itm.ExtraItems)
    {
-    for(var j = 0; j < oldCount; j++)
+    for(j = 0; j < oldCount; j++)
     {
-     priv.Prefs.deleteBranch("Format[" + idx + "].Extras.Left[" + j + "]");
-     priv.Prefs.deleteBranch("Format[" + idx + "].Extras.Right[" + j + "]");
-     priv.Prefs.deleteBranch("Format[" + idx + "].Extras.Begin[" + j + "]");
-     priv.Prefs.deleteBranch("Format[" + idx + "].Extras.End[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + idx + "].Extras.Left[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + idx + "].Extras.Right[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + idx + "].Extras.Begin[" + j + "]");
-     priv.Syncs.deleteBranch("Format[" + idx + "].Extras.End[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + idx + "].Extras.Left[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + idx + "].Extras.Right[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + idx + "].Extras.Begin[" + j + "]");
+     GaiaFormatDialog._Prefs.deleteBranch("Format[" + idx + "].Extras.End[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + idx + "].Extras.Left[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + idx + "].Extras.Right[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + idx + "].Extras.Begin[" + j + "]");
+     GaiaFormatDialog._Syncs.deleteBranch("Format[" + idx + "].Extras.End[" + j + "]");
     }
    }
-   priv.Prefs.setIntPref("Format[" + idx + "].Extras.Items", itm.ExtraItems);
-   priv.Syncs.setBoolPref("Format[" + idx + "].Extras.Items", true);
+   GaiaFormatDialog._Prefs.setIntPref("Format[" + idx + "].Extras.Items", itm.ExtraItems);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Extras.Items", true);
    if (itm.ExtraItems > 0)
    {
-    var alrt = priv.Prefs.getBoolPref("UnsafeAlert");
-    for(var j = 0; j < itm.ExtraItems; j++)
+    var alrt = GaiaFormatDialog._Prefs.getBoolPref("UnsafeAlert");
+    for(j = 0; j < itm.ExtraItems; j++)
     {
-     priv.Prefs.setCharPref("Format[" + idx + "].Extras.Left[" + j + "]", encodeURIComponent(itm.ExtraItem[j].Left));
-     priv.Prefs.setCharPref("Format[" + idx + "].Extras.Right[" + j + "]", encodeURIComponent(itm.ExtraItem[j].Right));
-     priv.Prefs.setCharPref("Format[" + idx + "].Extras.Begin[" + j + "]", encodeURIComponent(itm.ExtraItem[j].Begin));
-     priv.Prefs.setCharPref("Format[" + idx + "].Extras.End[" + j + "]", encodeURIComponent(itm.ExtraItem[j].End));
-     priv.Syncs.setBoolPref("Format[" + idx + "].Extras.Left[" + j + "]", true);
-     priv.Syncs.setBoolPref("Format[" + idx + "].Extras.Right[" + j + "]", true);
-     priv.Syncs.setBoolPref("Format[" + idx + "].Extras.Begin[" + j + "]", true);
-     priv.Syncs.setBoolPref("Format[" + idx + "].Extras.End[" + j + "]", true);
+     GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].Extras.Left[" + j + "]", encodeURIComponent(itm.ExtraItem[j].Left));
+     GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].Extras.Right[" + j + "]", encodeURIComponent(itm.ExtraItem[j].Right));
+     GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].Extras.Begin[" + j + "]", encodeURIComponent(itm.ExtraItem[j].Begin));
+     GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].Extras.End[" + j + "]", encodeURIComponent(itm.ExtraItem[j].End));
+     GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Extras.Left[" + j + "]", true);
+     GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Extras.Right[" + j + "]", true);
+     GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Extras.Begin[" + j + "]", true);
+     GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Extras.End[" + j + "]", true);
      if (itm.ExtraItem[j].Left.indexOf('[') > -1 || itm.ExtraItem[j].Left.indexOf(']') > -1 ||
          itm.ExtraItem[j].Right.indexOf('[') > -1 || itm.ExtraItem[j].Right.indexOf(']') > -1)
      {
       if (alrt)
       {
        var notAgain = {value: false};
-       priv.Prompts.alertCheck(null, "GaiaFormat", priv.lclAlrtUnsafe, priv.lclAlrtUnShow, notAgain);
+       GaiaFormatDialog._Prompts.alertCheck(null, "GaiaFormat", GaiaFormatDialog._lclAlrtUnsafe, GaiaFormatDialog._lclAlrtUnShow, notAgain);
        if (notAgain.value)
-        priv.Prefs.setBoolPref("UnsafeAlert", false);
+        GaiaFormatDialog._Prefs.setBoolPref("UnsafeAlert", false);
       }
       alrt = false;
      }
@@ -399,116 +397,116 @@ com.RealityRipple.GaiaFormatDialog = function()
   var pItems = oldPrefs.getChildList("", {});
   if (pItems.length > 0)
    oldPrefs.deleteBranch("");
-  if (priv.Prefs.prefHasUserValue("Forum"))
-   priv.Prefs.deleteBranch("Forum");
-  if (priv.Prefs.prefHasUserValue("Guild"))
-   priv.Prefs.deleteBranch("Guild");
-  if (priv.Prefs.prefHasUserValue("PM"))
-   priv.Prefs.deleteBranch("PM");
-  if (priv.Prefs.prefHasUserValue("Comm"))
-   priv.Prefs.deleteBranch("Comm");
-  if (priv.Prefs.prefHasUserValue("Begin"))
-   priv.Prefs.deleteBranch("Begin");
-  if (priv.Prefs.prefHasUserValue("End"))
-   priv.Prefs.deleteBranch("End");
-  if (priv.Prefs.prefHasUserValue("Style"))
-   priv.Prefs.deleteBranch("Style");
-  if (priv.Prefs.prefHasUserValue("Extras"))
-   priv.Prefs.deleteBranch("Extras");
-  if (priv.Prefs.prefHasUserValue("EItems"))
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("Forum"))
+   GaiaFormatDialog._Prefs.deleteBranch("Forum");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("Guild"))
+   GaiaFormatDialog._Prefs.deleteBranch("Guild");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("PM"))
+   GaiaFormatDialog._Prefs.deleteBranch("PM");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("Comm"))
+   GaiaFormatDialog._Prefs.deleteBranch("Comm");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("Begin"))
+   GaiaFormatDialog._Prefs.deleteBranch("Begin");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("End"))
+   GaiaFormatDialog._Prefs.deleteBranch("End");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("Style"))
+   GaiaFormatDialog._Prefs.deleteBranch("Style");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("Extras"))
+   GaiaFormatDialog._Prefs.deleteBranch("Extras");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("EItems"))
   {
-   var oldItems = priv.Prefs.getIntPref("EItems");
-   priv.Prefs.deleteBranch("EItems");
-   for (var i = 0; i < oldItems; i++)
+   var oldItems = GaiaFormatDialog._Prefs.getIntPref("EItems");
+   GaiaFormatDialog._Prefs.deleteBranch("EItems");
+   for (i = 0; i < oldItems; i++)
    {
-    if (priv.Prefs.prefHasUserValue("EBegin[" + i + "]"))
-     priv.Prefs.deleteBranch("EBegin[" + i + "]");
-    if (priv.Prefs.prefHasUserValue("EEnd[" + i + "]"))
-     priv.Prefs.deleteBranch("EEnd[" + i + "]");
-    if (priv.Prefs.prefHasUserValue("ELeft[" + i + "]"))
-     priv.Prefs.deleteBranch("ELeft[" + i + "]");
-    if (priv.Prefs.prefHasUserValue("ERight[" + i + "]"))
-     priv.Prefs.deleteBranch("ERight[" + i + "]");
+    if (GaiaFormatDialog._Prefs.prefHasUserValue("EBegin[" + i + "]"))
+     GaiaFormatDialog._Prefs.deleteBranch("EBegin[" + i + "]");
+    if (GaiaFormatDialog._Prefs.prefHasUserValue("EEnd[" + i + "]"))
+     GaiaFormatDialog._Prefs.deleteBranch("EEnd[" + i + "]");
+    if (GaiaFormatDialog._Prefs.prefHasUserValue("ELeft[" + i + "]"))
+     GaiaFormatDialog._Prefs.deleteBranch("ELeft[" + i + "]");
+    if (GaiaFormatDialog._Prefs.prefHasUserValue("ERight[" + i + "]"))
+     GaiaFormatDialog._Prefs.deleteBranch("ERight[" + i + "]");
    }
   }
- }
-
- pub.init = function()
+ },
+ init: function()
  {
   try
   {
+   var i = 0;
    document.getElementById("cmbFormat").removeAllItems();
-   var fmtCount = priv.Prefs.getIntPref("Formats");
+   var fmtCount = GaiaFormatDialog._Prefs.getIntPref("Formats");
    if (fmtCount > 0)
    {
     var fFind = '';
     var iFound = -1;
     try
     {
-     fFind = priv.Prefs.getCharPref("Favored");
+     fFind = GaiaFormatDialog._Prefs.getCharPref("Favored");
     }
     catch(e)
     {
      iFound = 0;
     }
-    for (var i = 0; i < fmtCount; i++)
+    for (i = 0; i < fmtCount; i++)
     {
-     var pName = decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].name"));
-     var pID = priv.Prefs.getCharPref("Format[" + i + "].id");
+     var pName = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].name"));
+     var pID = GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].id");
      if (iFound == -1 && fFind == pID)
       iFound = i;
      document.getElementById("cmbFormat").appendItem(pName, pID);
-     priv.format[pID] = {
+     GaiaFormatDialog._format[pID] = {
       "name": pName,
       "id": pID,
-      "Type_Forum": priv.Prefs.getBoolPref("Format[" + i + "].Type.Forum"),
-      "Type_Guild": priv.Prefs.getBoolPref("Format[" + i + "].Type.Guild"),
-      "Type_PM": priv.Prefs.getBoolPref("Format[" + i + "].Type.PM"),
-      "Type_Comm": priv.Prefs.getBoolPref("Format[" + i + "].Type.Comm"),
-      "Begin": decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].Begin")),
-      "End": decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].End")),
-      "Style": priv.Prefs.getIntPref("Format[" + i + "].Style"),
-      "Extras": priv.Prefs.getBoolPref("Format[" + i + "].Extras"),
-      "ExtraItems": priv.Prefs.getIntPref("Format[" + i + "].Extras.Items"),
+      "Type_Forum": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Forum"),
+      "Type_Guild": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Guild"),
+      "Type_PM": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.PM"),
+      "Type_Comm": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Comm"),
+      "Begin": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Begin")),
+      "End": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].End")),
+      "Style": GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Style"),
+      "Extras": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Extras"),
+      "ExtraItems": GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Extras.Items"),
       "ExtraItem": []};
-     for (var j = 0; j < priv.format[pID].ExtraItems; j++)
+     for (var j = 0; j < GaiaFormatDialog._format[pID].ExtraItems; j++)
      {
-      priv.format[pID].ExtraItem[j] = {
-       "Begin": decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].Extras.Begin[" + j + "]")),
-       "End":   decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].Extras.End[" + j + "]")),
-       "Left":  decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].Extras.Left[" + j + "]")),
-       "Right": decodeURIComponent(priv.Prefs.getCharPref("Format[" + i + "].Extras.Right[" + j + "]"))
+      GaiaFormatDialog._format[pID].ExtraItem[j] = {
+       "Begin": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Begin[" + j + "]")),
+       "End":   decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.End[" + j + "]")),
+       "Left":  decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Left[" + j + "]")),
+       "Right": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Right[" + j + "]"))
       };
      }
     }
     if (iFound == -1)
      iFound = 0;
     document.getElementById("cmbFormat").selectedIndex = iFound;
-    pub.showFormat();
+    GaiaFormatDialog.showFormat();
    }
    else
    {
     document.getElementById("cmbFormat").appendItem("Default", 'default');
     var pForum, pGuild, pPM, pComm, pBegin, pEnd, pStyle, pExtras, pExtraItems;
-    try {pForum = priv.Prefs.getBoolPref("Forum");}
+    try {pForum = GaiaFormatDialog._Prefs.getBoolPref("Forum");}
     catch (e) {pForum = true;}
-    try {pGuild = priv.Prefs.getBoolPref("Guild");}
+    try {pGuild = GaiaFormatDialog._Prefs.getBoolPref("Guild");}
     catch (e) {pGuild = true;}
-    try {pPM = priv.Prefs.getBoolPref("PM");}
+    try {pPM = GaiaFormatDialog._Prefs.getBoolPref("PM");}
     catch (e) {pPM = true;}
-    try {pComm = priv.Prefs.getBoolPref("Comm");}
+    try {pComm = GaiaFormatDialog._Prefs.getBoolPref("Comm");}
     catch (e) {pComm = true;}
-    try {pBegin = decodeURIComponent(priv.Prefs.getCharPref("Begin"));}
-    catch (e) {pBegin = priv.lclPrefix;}
-    try {pEnd = decodeURIComponent(priv.Prefs.getCharPref("End"));}
-    catch (e) {pEnd = priv.lclSuffix;}
-    try {pStyle = priv.Prefs.getIntPref("Style");}
+    try {pBegin = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Begin"));}
+    catch (e) {pBegin = GaiaFormatDialog._lclPrefix;}
+    try {pEnd = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("End"));}
+    catch (e) {pEnd = GaiaFormatDialog._lclSuffix;}
+    try {pStyle = GaiaFormatDialog._Prefs.getIntPref("Style");}
     catch (e) {pStyle = 0;}
-    try {pExtras = priv.Prefs.getBoolPref("Extras");}
+    try {pExtras = GaiaFormatDialog._Prefs.getBoolPref("Extras");}
     catch (e) {pExtras = false;}
-    try {pExtraItems = priv.Prefs.getIntPref("EItems");}
+    try {pExtraItems = GaiaFormatDialog._Prefs.getIntPref("EItems");}
     catch (e) {pExtraItems = 0;}
-    priv.format['default'] = {
+    GaiaFormatDialog._format['default'] = {
       "name": "Default",
       "id": 'default',
       "Type_Forum": pForum,
@@ -521,20 +519,20 @@ com.RealityRipple.GaiaFormatDialog = function()
       "Extras": pExtras,
       "ExtraItems": pExtraItems,
       "ExtraItem": []};
-    if(priv.format['default'].ExtraItems > 0)
+    if(GaiaFormatDialog._format['default'].ExtraItems > 0)
     {
-     for(var i = 0; i < priv.format['default'].ExtraItems; i++)
+     for(i = 0; i < GaiaFormatDialog._format['default'].ExtraItems; i++)
      {
       var eBegin, eEnd, eLeft, eRight;
-      try {eBegin = decodeURIComponent(priv.Prefs.getCharPref("EBegin[" + i + "]"));}
+      try {eBegin = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("EBegin[" + i + "]"));}
       catch (e) {eBegin = '';}
-      try {eEnd = decodeURIComponent(priv.Prefs.getCharPref("EEnd[" + i + "]"));}
+      try {eEnd = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("EEnd[" + i + "]"));}
       catch (e) {eEnd = '';}
-      try {eLeft = decodeURIComponent(priv.Prefs.getCharPref("ELeft[" + i + "]"));}
+      try {eLeft = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("ELeft[" + i + "]"));}
       catch (e) {eLeft = '';}
-      try {eRight = decodeURIComponent(priv.Prefs.getCharPref("ERight[" + i + "]"));}
+      try {eRight = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("ERight[" + i + "]"));}
       catch (e) {eRight = '';}
-      priv.format['default'].ExtraItem[i] = {
+      GaiaFormatDialog._format['default'].ExtraItem[i] = {
        "Begin": eBegin,
        "End":   eEnd,
        "Left":  eLeft,
@@ -543,32 +541,31 @@ com.RealityRipple.GaiaFormatDialog = function()
      }
     }
     document.getElementById("cmbFormat").selectedIndex = 0;
-    pub.showFormat();
+    GaiaFormatDialog.showFormat();
    }
   }
   catch(e)
   {
-   priv.format['default'] = {
+   GaiaFormatDialog._format['default'] = {
      "name": "Default",
      "id": 'default',
      "Type_Forum": true,
      "Type_Guild": true,
      "Type_PM": true,
      "Type_Comm": true,
-     "Begin": priv.lclPrefix,
-     "End": priv.lclSuffix,
+     "Begin": GaiaFormatDialog._lclPrefix,
+     "End": GaiaFormatDialog._lclSuffix,
      "Style": 0,
      "Extras": false,
      "ExtraItems": 0,
      "ExtraItem": []};
    document.getElementById("cmbFormat").selectedIndex = 0;
-   pub.showFormat();
+   GaiaFormatDialog.showFormat();
   }
- }
-
- pub.populateFormat = function()
+ },
+ populateFormat: function()
  {
-  var myFormat = priv.format[priv.fIndex];
+  var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
   myFormat.Type_Forum = document.getElementById("chkForum").checked;
   myFormat.Type_Guild = document.getElementById("chkGuild").checked;
   myFormat.Type_PM = document.getElementById("chkPM").checked;
@@ -577,24 +574,21 @@ com.RealityRipple.GaiaFormatDialog = function()
   myFormat.End = document.getElementById("txtFormatSuf").value;
   myFormat.Style = document.getElementById("cmbStyle").value;
   myFormat.Extras = document.getElementById("chkExtra").checked;
-  
-  pub.postCheck();
- }
-
- pub.postCheck = function()
+  GaiaFormatDialog.postCheck();
+ },
+ postCheck: function()
  {
   document.getElementById('cmbStyle').disabled  = !(document.getElementById('chkForum').checked);
   document.getElementById('lstExtras').disabled = !(document.getElementById('chkExtra').checked);
   document.getElementById('cmdAdd').disabled    = !(document.getElementById('chkExtra').checked);
   document.getElementById('cmdRem').disabled    = !(document.getElementById('chkExtra').checked);
   var i = document.getElementById("lstExtras").selectedIndex;
-  document.getElementById('txtELeft').disabled  = !(document.getElementById('chkExtra').checked & i >= 0);
-  document.getElementById('txtERight').disabled = !(document.getElementById('chkExtra').checked & i >= 0);
-  document.getElementById('txtEBegin').disabled = !(document.getElementById('chkExtra').checked & i >= 0);
-  document.getElementById('txtEEnd').disabled   = !(document.getElementById('chkExtra').checked & i >= 0);
- }
-
- pub.importFile = function()
+  document.getElementById('txtELeft').disabled  = !(document.getElementById('chkExtra').checked && i >= 0);
+  document.getElementById('txtERight').disabled = !(document.getElementById('chkExtra').checked && i >= 0);
+  document.getElementById('txtEBegin').disabled = !(document.getElementById('chkExtra').checked && i >= 0);
+  document.getElementById('txtEEnd').disabled   = !(document.getElementById('chkExtra').checked && i >= 0);
+ },
+ importFile: function()
  {
   var picker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
   var fileLocator = Components.classes["@mozilla.org/file/directory_service;1"].getService(Components.interfaces.nsIProperties);
@@ -616,13 +610,12 @@ com.RealityRipple.GaiaFormatDialog = function()
    if (line.value)
     lines.push(line.value);
    stream.close();
-   priv.xml.reader.parseFromString(lines.join("\n\r"), "text/xml");
-   pub.showFormat();
-   pub.SelectExtra();
+   GaiaFormatDialog._xml_reader.parseFromString(lines.join("\n\r"), "text/xml");
+   GaiaFormatDialog.showFormat();
+   GaiaFormatDialog.SelectExtra();
   }
- }
-
- pub.exportFile = function()
+ },
+ exportFile: function()
  {
   var sFile;
   var picker = Components.classes["@mozilla.org/filepicker;1"].createInstance(Components.interfaces.nsIFilePicker);
@@ -632,7 +625,7 @@ com.RealityRipple.GaiaFormatDialog = function()
   picker.appendFilters(picker.filterXML);
   picker.appendFilters(picker.filterAll);
   picker.displayDirectory = fileLocator.get("Desk", Components.interfaces.nsILocalFile);
-  var myFormat = priv.format[priv.fIndex];
+  var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
   if (picker.show() != picker.returnCancel)
   {
    var nl = "\r\n";
@@ -649,7 +642,7 @@ com.RealityRipple.GaiaFormatDialog = function()
    sFile+= '   <comment>' + myFormat.Type_Comm + '</comment>' + nl;
    sFile+= '  </message>' + nl;
    sFile+= '  <style>' + myFormat.Style + '</style>' + nl;
-   sFile+= ' </standard>' + nl
+   sFile+= ' </standard>' + nl;
    sFile+= ' <extras count="' + myFormat.ExtraItems + '">' + nl;
    sFile+= '  <enabled>' + myFormat.Extras + '</enabled>' + nl;
    if(myFormat.ExtraItems > 0)
@@ -674,56 +667,55 @@ com.RealityRipple.GaiaFormatDialog = function()
     stream.init(fileStream, "UTF-8", 16384, Components.interfaces.nsIConverterInputStream.DEFAULT_REPLACEMENT_CHARACTER);
     stream.writeString(sFile);
     stream.close();
-    priv.Prompts.alert(null,'GaiaFormat',priv.lclAlrtExp);
+    GaiaFormatDialog._Prompts.alert(null,'GaiaFormat', GaiaFormatDialog._lclAlrtExp);
    }
    catch (e)
    {
-    priv.Prompts.alert(null,'GaiaFormat',priv.lclAlrtExpFail + " [" + e + "]");
+    GaiaFormatDialog._Prompts.alert(null,'GaiaFormat', GaiaFormatDialog._lclAlrtExpFail + " [" + e + "]");
    }
   }
- }
-
- priv.xml.parse = function(xdata)
+ },
+ _xml_parse: function()
  {
-  var myFormat = priv.format[priv.fIndex];
-  switch(xdata.ctnr)
+  var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
+  switch(GaiaFormatDialog._xml_ctnr)
   {
    case 'standard':
-    switch(xdata.element)
+    switch(GaiaFormatDialog._xml_element)
     {
      case 'prefix':
-      myFormat.Begin = decodeURIComponent(xdata.value);
+      myFormat.Begin = decodeURIComponent(GaiaFormatDialog._xml_value);
       break;
      case 'suffix':
-      myFormat.End = decodeURIComponent(xdata.value);
+      myFormat.End = decodeURIComponent(GaiaFormatDialog._xml_value);
       break;
      case 'style':
-      myFormat.Style = xdata.value;
+      myFormat.Style = GaiaFormatDialog._xml_value;
       break;
     }
     break;
    case 'message':
-    switch(xdata.element)
+    switch(GaiaFormatDialog._xml_element)
     {
      case 'forum':
-      myFormat.Type_Forum = (xdata.value == 'true');
+      myFormat.Type_Forum = (GaiaFormatDialog._xml_value == 'true');
       break;
      case 'pm':
-      myFormat.Type_PM = (xdata.value == 'true');
+      myFormat.Type_PM = (GaiaFormatDialog._xml_value == 'true');
       break;
      case 'guild':
-      myFormat.Type_Guild = (xdata.value == 'true');
+      myFormat.Type_Guild = (GaiaFormatDialog._xml_value == 'true');
       break;
      case 'comment':
-      myFormat.Type_Comm = (xdata.value == 'true');
+      myFormat.Type_Comm = (GaiaFormatDialog._xml_value == 'true');
       break;
     }
     break;
    case 'extras':
-    switch(xdata.element)
+    switch(GaiaFormatDialog._xml_element)
     {
      case 'extras':
-      myFormat.ExtraItems = xdata.attrs.v[0];
+      myFormat.ExtraItems = GaiaFormatDialog._xml_attr_v[0];
       myFormat.ExtraItem = [];
       for (var i = 0; i < myFormat.ExtraItems; i++)
       {
@@ -735,31 +727,30 @@ com.RealityRipple.GaiaFormatDialog = function()
       }
       break;
      case 'enabled':
-      myFormat.Extras = (xdata.value == 'true');
+      myFormat.Extras = (GaiaFormatDialog._xml_value == 'true');
       break;
     }
     break;
    case 'extra':
-    switch(xdata.element)
+    switch(GaiaFormatDialog._xml_element)
     {
      case 'leftkey':
-      myFormat.ExtraItem[priv.xml.EItem].Left = decodeURIComponent(xdata.value);
+      myFormat.ExtraItem[GaiaFormatDialog._xml_EItem].Left = decodeURIComponent(GaiaFormatDialog._xml_value);
       break;
      case 'rightkey':
-      myFormat.ExtraItem[priv.xml.EItem].Right = decodeURIComponent(xdata.value);
+      myFormat.ExtraItem[GaiaFormatDialog._xml_EItem].Right = decodeURIComponent(GaiaFormatDialog._xml_value);
       break;
      case 'prefix':
-      myFormat.ExtraItem[priv.xml.EItem].Begin = decodeURIComponent(xdata.value);
+      myFormat.ExtraItem[GaiaFormatDialog._xml_EItem].Begin = decodeURIComponent(GaiaFormatDialog._xml_value);
       break;
      case 'suffix':
-      myFormat.ExtraItem[priv.xml.EItem].End = decodeURIComponent(xdata.value);
+      myFormat.ExtraItem[GaiaFormatDialog._xml_EItem].End = decodeURIComponent(GaiaFormatDialog._xml_value);
       break;
     }
     break;
   }
- }
-
- priv.xml.cleanup = function()
+ },
+ _xml_cleanup: function()
  {
   while(document.getElementById("lstExtras").getRowCount() != 0)
    document.getElementById("lstExtras").removeItemAt(0);
@@ -767,123 +758,126 @@ com.RealityRipple.GaiaFormatDialog = function()
   document.getElementById("txtERight").value = '';
   document.getElementById("txtEBegin").value = '';
   document.getElementById("txtEEnd").value = '';
-  var myFormat = priv.format[priv.fIndex];
+  var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
   if(myFormat.ExtraItems > 0)
   {
    for(var i = 0; i < myFormat.ExtraItems; i++)
    {
-    document.getElementById("lstExtras").appendItem(myFormat.ExtraItem[i].Left + priv.lclSpecial + myFormat.ExtraItem[i].Right);
+    document.getElementById("lstExtras").appendItem(myFormat.ExtraItem[i].Left + GaiaFormatDialog._lclSpecial + myFormat.ExtraItem[i].Right);
    }
    document.getElementById("lstExtras").selectedIndex = 0;
-   pub.SelectExtra();
+   GaiaFormatDialog.SelectExtra();
   }
-  pub.postCheck();
-  priv.Prompts.alert(null,'GaiaFormat',priv.lclAlrtImp);
- }
-
- priv.xml.reader.contentHandler =
+  GaiaFormatDialog.postCheck();
+  GaiaFormatDialog._Prompts.alert(null,'GaiaFormat',GaiaFormatDialog._lclAlrtImp);
+ },
+ xml_prepare: function()
  {
-  startDocument: function()
+  GaiaFormatDialog._xml_reader.contentHandler =
   {
-   priv.xml.parsing = true;
-  },
-  endDocument: function()
-  {
-   priv.xml.parsing = false;
-   priv.xml.cleanup();
-  },
-  startElement: function(uri, localName, qName, /*nsISAXAttributes*/ attributes)
-  {
-   if (priv.xml.parsing)
+   startDocument: function()
+   {
+    GaiaFormatDialog._xml_parsing = true;
+   },
+   endDocument: function()
+   {
+    GaiaFormatDialog._xml_parsing = false;
+    GaiaFormatDialog._xml_cleanup();
+   },
+   startElement: function(uri, localName, qName, /*nsISAXAttributes*/ attributes)
+   {
+    var i = 0;
+    if (GaiaFormatDialog._xml_parsing)
+    {
+     if (localName=='standard' || localName=='message' || localName=='extras' || localName=='extra')
+     {
+      GaiaFormatDialog._xml_ctnr = localName;
+      if (localName=='extras')
+      {
+       for(i = 0; i < attributes.length; i++)
+       {
+        GaiaFormatDialog._xml_attr_n.push(attributes.getQName(i));
+        GaiaFormatDialog._xml_attr_v.push(attributes.getValue(i));
+       }
+       GaiaFormatDialog._xml_element = localName;
+       GaiaFormatDialog._xml_value   = '';
+       GaiaFormatDialog._xml_EItem   = 0;
+       GaiaFormatDialog._xml_parse();
+      }
+     }
+     else
+     {
+      for(i = 0; i < attributes.length; i++)
+      {
+       GaiaFormatDialog._xml_attr_n.push(attributes.getQName(i));
+       GaiaFormatDialog._xml_attr_v.push(attributes.getValue(i));
+      }
+      GaiaFormatDialog._xml_element = localName;
+      GaiaFormatDialog._xml_value   = '';
+     }
+    }
+   },
+   endElement: function(uri, localName, qName)
    {
     if (localName=='standard' || localName=='message' || localName=='extras' || localName=='extra')
     {
-     priv.xml.ctnr = localName;
-     if (localName=='extras')
+     if (localName=='message')
+      GaiaFormatDialog._xml_ctnr = 'standard';
+     else if (localName=='extra')
      {
-      for(var i = 0; i < attributes.length; i++)
-      {
-       priv.xml.attrs.n.push(attributes.getQName(i));
-       priv.xml.attrs.v.push(attributes.getValue(i));
-      }
-      priv.xml.element = localName;
-      priv.xml.value   = '';
-      priv.xml.EItem  = 0;
-      priv.xml.parse(priv.xml);
+      GaiaFormatDialog._xml_EItem++;
+      GaiaFormatDialog._xml_ctnr = 'extras';
      }
+     else
+      GaiaFormatDialog._xml_ctnr = '';
     }
     else
     {
-     for(var i = 0; i < attributes.length; i++)
+     if (GaiaFormatDialog._xml_parsing)
      {
-      priv.xml.attrs.n.push(attributes.getQName(i));
-      priv.xml.attrs.v.push(attributes.getValue(i));
+      if (GaiaFormatDialog._xml_element != '')
+       GaiaFormatDialog._xml_parse();
+      GaiaFormatDialog._xml_attr_n = [];
+      GaiaFormatDialog._xml_attr_v = [];
+      GaiaFormatDialog._xml_element = '';
+      GaiaFormatDialog._xml_value   = '';
      }
-     priv.xml.element = localName;
-     priv.xml.value   = ''
     }
-   }
-  },
-  endElement: function(uri, localName, qName)
-  {
-   if (localName=='standard' || localName=='message' || localName=='extras' || localName=='extra')
+   },
+   characters: function(value)
    {
-    if (localName=='message')
-     priv.xml.ctnr = 'standard';
-    else if (localName=='extra')
+    if (GaiaFormatDialog._xml_parsing)
     {
-     priv.xml.EItem++;
-     priv.xml.ctnr = 'extras';
+     if (GaiaFormatDialog._xml_element != '')
+     {
+      GaiaFormatDialog._xml_value+= value;
+     }
     }
-    else
-     priv.xml.ctnr = '';
-   }
-   else
+   },
+   processingInstruction: function(target, data)
    {
-    if (priv.xml.parsing)
-    {
-     if (priv.xml.element != '')
-      priv.xml.parse(priv.xml)
-     priv.xml.attrs.n = new Array();
-     priv.xml.attrs.v = new Array();
-     priv.xml.element = ''
-     priv.xml.value   = ''
-    }
-   }
-  },
-  characters: function(value)
-  {
-   if (priv.xml.parsing)
+    // don't care
+   },
+   ignorableWhitespace: function(whitespace)
    {
-    if (priv.xml.element != '')
-    {
-     priv.xml.value+= value;
-    }
+    // don't care
+   },
+   startPrefixMapping: function(prefix, uri)
+   {
+    // don't care
+   },
+   endPrefixMapping: function(prefix)
+   {
+    // don't care
+   },
+   QueryInterface: function(iid)
+   {
+    if(!iid.equals(Components.interfaces.nsISupports) && !iid.equals(Components.interfaces.nsISAXContentHandler))
+     throw Components.results.NS_ERROR_NO_INTERFACE;
+    return this;
    }
-  },
-  processingInstruction: function(target, data)
-  {
-   // don't care
-  },
-  ignorableWhitespace: function(whitespace)
-  {
-   // don't care
-  },
-  startPrefixMapping: function(prefix, uri)
-  {
-   // don't care
-  },
-  endPrefixMapping: function(prefix)
-  {
-   // don't care
-  },
-  QueryInterface: function(iid)
-  {
-   if(!iid.equals(Components.interfaces.nsISupports) && !iid.equals(Components.interfaces.nsISAXContentHandler))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-   return this;
-  }
- };
-
- return pub;
-}();
+  };
+ }
+};
+GaiaFormatDialog.loadLocales();
+GaiaFormatDialog.xml_prepare();

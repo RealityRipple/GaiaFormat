@@ -8,43 +8,43 @@
 ]>
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         title="&dialog.title;"
-        onload="com.RealityRipple.GaiaFormatDialog.init();">
+        onload="GaiaFormatDialog.init();">
  <script type="application/x-javascript" src="chrome://gaiaformat/content/option.js"/>
  <groupbox flex="1">
   <caption flex="1" label="Format">
-   <menulist id="cmbFormat" flex="1" oncommand="com.RealityRipple.GaiaFormatDialog.showFormat();">
+   <menulist id="cmbFormat" flex="1" oncommand="GaiaFormatDialog.showFormat();">
     <menupopup>
      <menuitem label="Default" value="0" />
     </menupopup>
    </menulist>
-   <button id="cmdAddFormat" label="&addcmd.label;" oncommand="com.RealityRipple.GaiaFormatDialog.newFormat();" />
-   <button id="cmdRemFormat" label="&remcmd.label;" oncommand="com.RealityRipple.GaiaFormatDialog.remFormat();" />
+   <button id="cmdAddFormat" label="&addcmd.label;" oncommand="GaiaFormatDialog.newFormat();" />
+   <button id="cmdRemFormat" label="&remcmd.label;" oncommand="GaiaFormatDialog.remFormat();" />
   </caption>
   <groupbox flex="1">
    <caption label="&standard.title;" />
    <hbox flex="1">
     <vbox flex="1">
      <label   control="txtFormatPre" value    ="&prefix.label;" />
-     <textbox id     ="txtFormatPre" multiline="true" size="100" width="250" oninput="com.RealityRipple.GaiaFormatDialog.populateFormat();" />
+     <textbox id     ="txtFormatPre" multiline="true" size="100" width="250" oninput="GaiaFormatDialog.populateFormat();" />
      <label   control="txtFormatSuf" value    ="&suffix.label;" />
-     <textbox id     ="txtFormatSuf" multiline="true" size="100" width="250" oninput="com.RealityRipple.GaiaFormatDialog.populateFormat();" />
+     <textbox id     ="txtFormatSuf" multiline="true" size="100" width="250" oninput="GaiaFormatDialog.populateFormat();" />
     </vbox>
     <vbox flex="1">
      <groupbox flex="1">
       <caption label="&messages.title;" />
       <hbox>
        <vbox>
-        <checkbox id="chkForum" label="&forum.label;"     oncommand="com.RealityRipple.GaiaFormatDialog.populateFormat();" />
-        <checkbox id="chkPM"    label="&pm.label;"        oncommand="com.RealityRipple.GaiaFormatDialog.populateFormat();"/>
+        <checkbox id="chkForum" label="&forum.label;"     oncommand="GaiaFormatDialog.populateFormat();" />
+        <checkbox id="chkPM"    label="&pm.label;"        oncommand="GaiaFormatDialog.populateFormat();"/>
        </vbox>
        <vbox>
-        <checkbox id="chkGuild"   label="&guild.label;"   oncommand="com.RealityRipple.GaiaFormatDialog.populateFormat();" />
-        <checkbox id="chkComment" label="&comment.label;" oncommand="com.RealityRipple.GaiaFormatDialog.populateFormat();" />
+        <checkbox id="chkGuild"   label="&guild.label;"   oncommand="GaiaFormatDialog.populateFormat();" />
+        <checkbox id="chkComment" label="&comment.label;" oncommand="GaiaFormatDialog.populateFormat();" />
        </vbox>
       </hbox>
      </groupbox>
      <label control="cmbStyle" value="&style.label;" />
-     <menulist id="cmbStyle" oncommand="com.RealityRipple.GaiaFormatDialog.populateFormat();">
+     <menulist id="cmbStyle" oncommand="GaiaFormatDialog.populateFormat();">
       <menupopup>
        <menuitem label="&style.normal;"   value="0"/>
        <menuitem label="&style.whisper;"  value="1"/>
@@ -67,42 +67,42 @@
   </groupbox>
   <groupbox flex="1">
    <caption>
-    <checkbox id="chkExtra" label="&extra.title;" oncommand="com.RealityRipple.GaiaFormatDialog.populateFormat();" />
+    <checkbox id="chkExtra" label="&extra.title;" oncommand="GaiaFormatDialog.populateFormat();" />
    </caption>
    <hbox flex="1">
     <vbox flex="1">
-     <listbox id="lstExtras" seltype="single" onclick="com.RealityRipple.GaiaFormatDialog.SelectExtra();" onkeyup="com.RealityRipple.GaiaFormatDialog.SelectExtra();" height="150" />
+     <listbox id="lstExtras" seltype="single" onclick="GaiaFormatDialog.SelectExtra();" onkeyup="GaiaFormatDialog.SelectExtra();" height="150" />
      <hbox>
-      <button id="cmdAdd" label="&addcmd.label;" oncommand="com.RealityRipple.GaiaFormatDialog.AddExtra('(',')','[color=gray]','[/color]');" />
+      <button id="cmdAdd" label="&addcmd.label;" oncommand="GaiaFormatDialog.AddExtra('(',')','[color=gray]','[/color]');" />
       <spacer flex="1" />
-      <button id="cmdRem" label="&remcmd.label;" oncommand="com.RealityRipple.GaiaFormatDialog.RemoveExtra();" />
+      <button id="cmdRem" label="&remcmd.label;" oncommand="GaiaFormatDialog.RemoveExtra();" />
      </hbox>
     </vbox>
     <vbox flex="1">
      <hbox>
       <label   control="txtELeft"  value    ="&leftkey.label;"/>
-      <textbox id     ="txtELeft"  multiline="false" size="5"   width="50"  onkeyup="com.RealityRipple.GaiaFormatDialog.SetExtra();" />
+      <textbox id     ="txtELeft"  multiline="false" size="5"   width="50"  onkeyup="GaiaFormatDialog.SetExtra();" />
       <label   control="txtERight" value    ="&rightkey.label;"/>
-      <textbox id     ="txtERight" multiline="false" size="5"   width="50"  onkeyup="com.RealityRipple.GaiaFormatDialog.SetExtra();" />
+      <textbox id     ="txtERight" multiline="false" size="5"   width="50"  onkeyup="GaiaFormatDialog.SetExtra();" />
      </hbox>
      <vbox>
       <label   control="txtEBegin" value    ="&prefix.label;"/>
-      <textbox id     ="txtEBegin" multiline="true"  size="100" width="250" onkeyup="com.RealityRipple.GaiaFormatDialog.SetExtra();" />
+      <textbox id     ="txtEBegin" multiline="true"  size="100" width="250" onkeyup="GaiaFormatDialog.SetExtra();" />
       <label   control="txtEEnd"   value    ="&suffix.label;"/>
-      <textbox id     ="txtEEnd"   multiline="true"  size="100" width="250" onkeyup="com.RealityRipple.GaiaFormatDialog.SetExtra();" />
+      <textbox id     ="txtEEnd"   multiline="true"  size="100" width="250" onkeyup="GaiaFormatDialog.SetExtra();" />
      </vbox>
     </vbox>
    </hbox>
   </groupbox>
   <hbox>
-   <button id="cmdImport" class="dialog-button" label="&impcmd.label;" oncommand="com.RealityRipple.GaiaFormatDialog.importFile();" />
-   <button id="cmdExport" class="dialog-button" label="&expcmd.label;" oncommand="com.RealityRipple.GaiaFormatDialog.exportFile();" />
+   <button id="cmdImport" class="dialog-button" label="&impcmd.label;" oncommand="GaiaFormatDialog.importFile();" />
+   <button id="cmdExport" class="dialog-button" label="&expcmd.label;" oncommand="GaiaFormatDialog.exportFile();" />
    <spacer flex="1" />
   </hbox>
  </groupbox>
  <hbox>
   <spacer flex="1" />
-  <button id="cmdOK"     class="dialog-button" icon="accept" label="&okButton.label;"     oncommand="com.RealityRipple.GaiaFormatDialog.save(); window.close();" />
+  <button id="cmdOK"     class="dialog-button" icon="accept" label="&okButton.label;"     oncommand="GaiaFormatDialog.save(); window.close();" />
   <button id="cmdCancel" class="dialog-button" icon="cancel" label="&cancelButton.label;" oncommand="window.close();" />
  </hbox>
 </window>
