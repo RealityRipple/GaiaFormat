@@ -581,13 +581,12 @@ var GaiaFormat =
       GaiaFormat.setPostText(subject, sBody);
       oHttp.setRequestHeader("Content-Length", sBody.length, false);
       oHttp.requestMethod = "POST";
-      GaiaFormat.observerService.removeObserver(GaiaFormat, "http-on-modify-request");
+      Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat, "http-on-modify-request");
      }
     }
    }
   },
-  get observerService() {return Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);},
-  register: function() {GaiaFormat.observerService.addObserver(GaiaFormat, "http-on-modify-request", false);},
+  register: function() {Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService).addObserver(GaiaFormat, "http-on-modify-request", false);},
   getPostText: function(subject)
   {
    var upStream = subject.QueryInterface(Components.interfaces.nsIUploadChannel).uploadStream;
