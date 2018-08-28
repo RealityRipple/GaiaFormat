@@ -7,6 +7,8 @@ locale	gaiaformat		nl			chrome/locale/nl/
 locale	gaiaformat		pt-BR			chrome/locale/pt-BR/
 locale	gaiaformat		sr			chrome/locale/sr/
 locale	gaiaformat		sv-SE			chrome/locale/sv-SE/
+locale	gaiaformat		uk			chrome/locale/uk/
+locale	gaiaformat		uk-UA			chrome/locale/uk-UA/
 locale	gaiaformat		tr			chrome/locale/tr/
 locale	gaiaformat		zh-CN			chrome/locale/zh-CN/
 overlay	chrome://browser/content/browser.xul		chrome://gaiaformat/content/gaiaformat.xul	application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}

@@ -1,0 +1,31 @@
+<!ENTITY dialog.title "Опції GaiaFormat">
+<!ENTITY standard.title "Стандартне форматування">
+<!ENTITY messages.title "Повідомлення, що форматуються">
+<!ENTITY extra.title "Додаткове форматування">
+<!ENTITY prefix.label "Початковий текст:">
+<!ENTITY suffix.label "Кінцевий текст:">
+<!ENTITY leftkey.label "Лівий символ:">
+<!ENTITY rightkey.label "Правий символ:">
+<!ENTITY style.label "Стиль постів на форумі:">
+<!ENTITY forum.label "Пости на форумі">
+<!ENTITY pm.label "Приватні повідомлення">
+<!ENTITY guild.label "Пости гільдії">
+<!ENTITY comment.label "Коментарі">
+<!ENTITY style.normal "Нормальний">
+<!ENTITY style.whisper "Шепіт">
+<!ENTITY style.shout "Крик">
+<!ENTITY style.think "Думка">
+<!ENTITY style.document "Документ">
+<!ENTITY style.ornate "Пишномовний">
+<!ENTITY style.ghost "Привид">
+<!ENTITY style.star "Зірка">
+<!ENTITY style.chain "Ланцюг">
+<!ENTITY style.rainbow "Веселка">
+<!ENTITY style.prism "Призма">
+<!ENTITY style.drippy "Чутливий">
+<!ENTITY style.thorny "Колючий">
+<!ENTITY style.sakura "Сакура">
+<!ENTITY addcmd.label "Додати">
+<!ENTITY remcmd.label "Вилучити">
+<!ENTITY impcmd.label "Імпорт…">
+<!ENTITY expcmd.label "Експорт…">
