@@ -3,7 +3,7 @@
  <Description about="urn:mozilla:install-manifest">
   <em:name>GaiaFormat</em:name>
   <em:id>{F4999074-2E3B-5531-8A05-0BA42DDB3A58}</em:id>
-  <em:version>2.4</em:version>
+  <em:version>2.5</em:version>
   <em:type>2</em:type>
   <!-- Firefox -->
   <em:targetApplication>
