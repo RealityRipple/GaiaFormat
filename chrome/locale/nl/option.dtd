@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Toets links:">
 <!ENTITY rightkey.label "Toets rechts:">
 <!ENTITY style.label "Forumberichtstijl:">
+<!ENTITY forumt.label "Forum onderwerpen">
 <!ENTITY forum.label "Forumberichten">
 <!ENTITY pm.label "Privéberichten">
 <!ENTITY guild.label "Gildeberichten">

@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "左项：">
 <!ENTITY rightkey.label "右项：">
 <!ENTITY style.label "论坛帖子样式：">
+<!ENTITY forumt.label "论坛主题">
 <!ENTITY forum.label "论坛帖子">
 <!ENTITY pm.label "论坛短信">
 <!ENTITY guild.label "工会文章">

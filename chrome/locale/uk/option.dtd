@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Лівий символ:">
 <!ENTITY rightkey.label "Правий символ:">
 <!ENTITY style.label "Стиль постів на форумі:">
+<!ENTITY forumt.label "Теми форуму">
 <!ENTITY forum.label "Пости на форумі">
 <!ENTITY pm.label "Приватні повідомлення">
 <!ENTITY guild.label "Пости гільдії">

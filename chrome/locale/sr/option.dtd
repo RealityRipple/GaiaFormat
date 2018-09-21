@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Дугме за леве:">
 <!ENTITY rightkey.label "Дугме за десно:">
 <!ENTITY style.label "Стил објављивања на форуму:">
+<!ENTITY forumt.label "форум теме">
 <!ENTITY forum.label "Теме у форуму">
 <!ENTITY pm.label "Приватне поруке">
 <!ENTITY guild.label "Теме у групама">

@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Sol Tuş:">
 <!ENTITY rightkey.label "Sağ Tuş:">
 <!ENTITY style.label "Forum Gönderme Stili:">
+<!ENTITY forumt.label "Forum Konuları">
 <!ENTITY forum.label "Forum Gönerileri">
 <!ENTITY pm.label "Özel Mesajlar">
 <!ENTITY guild.label "Loca Gönderileri">

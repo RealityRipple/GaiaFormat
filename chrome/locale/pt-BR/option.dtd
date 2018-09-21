@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Tecla da esquerda:">
 <!ENTITY rightkey.label "Tecla da direita:">
 <!ENTITY style.label "Estilo de postagens no fórum:">
+<!ENTITY forumt.label "Tópicos do fórum">
 <!ENTITY forum.label "Postagens no fórum">
 <!ENTITY pm.label "Mensagens privadas">
 <!ENTITY guild.label "Postagens corporativas">

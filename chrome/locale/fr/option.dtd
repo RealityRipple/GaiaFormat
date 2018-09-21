@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Touche Gauche">
 <!ENTITY rightkey.label "Touche Droite">
 <!ENTITY style.label "Style des Messages du Forum :">
+<!ENTITY forumt.label "Sujets du Forum">
 <!ENTITY forum.label "Messages du Forum">
 <!ENTITY pm.label "Messages Privés">
 <!ENTITY guild.label "Messages de la Guilde">

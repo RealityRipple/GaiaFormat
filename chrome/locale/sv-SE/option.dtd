@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Vänster om tangent:">
 <!ENTITY rightkey.label "Höger om tangent:">
 <!ENTITY style.label "Format för foruminlägg:">
+<!ENTITY forumt.label "Forumämnen">
 <!ENTITY forum.label "Foruminlägg">
 <!ENTITY pm.label "Personliga meddelanden">
 <!ENTITY guild.label "Gilleinlägg">

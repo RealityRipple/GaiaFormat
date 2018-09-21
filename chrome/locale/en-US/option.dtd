@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Left Key:">
 <!ENTITY rightkey.label "Right Key:">
 <!ENTITY style.label "Forum Post Style:">
+<!ENTITY forumt.label "Forum Topics">
 <!ENTITY forum.label "Forum Posts">
 <!ENTITY pm.label "Private Messages">
 <!ENTITY guild.label "Guild Posts">

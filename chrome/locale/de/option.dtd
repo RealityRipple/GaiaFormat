@@ -7,6 +7,7 @@
 <!ENTITY leftkey.label "Linke Taste:">
 <!ENTITY rightkey.label "Rechte Taste:">
 <!ENTITY style.label "Stil der Foreneinträge:">
+<!ENTITY forumt.label "Forumsthemen">
 <!ENTITY forum.label "Foreneinträge">
 <!ENTITY pm.label "Private Nachrichten">
 <!ENTITY guild.label "Gildeneinträge">
