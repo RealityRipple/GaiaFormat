@@ -42,183 +42,208 @@ var GaiaFormat =
  {
   var i = 0;
   var sVal = '';
-  if(GaiaFormat._isGaia() && GaiaFormat._isMsg() && !doc.getElementById("fmt_detector"))
+  if (GaiaFormat._isGaia() && GaiaFormat._isMsg() && !doc.getElementById("fmt_detector"))
   {
-   if (GaiaFormat._isMsg())
+   var fmtList = GaiaFormat._formatList();
+   try
    {
-    var fmtList = GaiaFormat._formatList();
-    try
+    var postBox = GaiaFormat._getBox();
+    var postcheck = GaiaFormat._trim(postBox.value);
+    var alreadyformed = false;
+    if (postcheck.indexOf('[quote]') != -1 && postcheck.substr(-8) != '[/quote]' || postcheck.indexOf('[/quote]') < 0 && postcheck.length > 0)
+     alreadyformed = true;
+    if (!doc.getElementById('fmt_selection'))
     {
-     var postBox = GaiaFormat._getBox();
-     var postcheck = GaiaFormat._trim(postBox.value);
-     var alreadyformed = false;
-     if (postcheck.indexOf('[quote]') > -1 && postcheck.substr(-8) != '[/quote]' || postcheck.indexOf('[/quote]') < 0 && postcheck.length > 0)
-      alreadyformed = true;
-     if (!doc.getElementById('fmt_selection'))
+     var fFind = '';
+     var iIndex = -1;
+     try
      {
-      var fFind = '';
-      var iIndex = -1;
-      try
+      fFind = GaiaFormat._Prefs.getCharPref("Favored");
+     }
+     catch(e)
+     {
+      iIndex = 0;
+     }
+     var idx = 0;
+     var submit_find;
+     var insertData = "";
+     var insertElement;
+     var beforeElement;
+     if (GaiaFormat._isPM())
+     {
+      submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode;
+      beforeElement = null;
+      insertData = "<label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
+                   " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
+      for(i in fmtList)
       {
-       fFind = GaiaFormat._Prefs.getCharPref("Favored");
-      }
-      catch(e)
-      {
-       iIndex = 0;
-      }
-      var idx = 0;
-      var submit_find;
-      var insertData = "";
-      var insertElement;
-      var beforeElement;
-      if (GaiaFormat._isPM())
-      {
-       submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode;
-       beforeElement = null;
-       insertData = "<label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
-                    " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
-       for(i in fmtList)
+       sVal = fmtList[i];
+       if (sVal.Type_PM)
        {
-        sVal = fmtList[i];
-        if (sVal.Type_PM && !GaiaFormat._isCom())
-        {
-         if (iIndex == -1 && fFind == sVal.id)
-          iIndex = idx;
-         idx++;
-         insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
-        }
+        if (iIndex == -1 && fFind == sVal.id)
+         iIndex = idx;
+        idx++;
+        insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
        }
-       insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
-                    "</select>";
-       insertData+= " <a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: middle;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
-                    "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\"> ";
-       insertElement = GaiaFormat._contentDoc().createElement('div');
-       insertElement.setAttribute("class", "sig");
       }
-      else if(GaiaFormat._isCom())
+      insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
+                   "</select>";
+      insertData+= " <a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: middle;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
+                   "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\"> ";
+      insertElement = GaiaFormat._contentDoc().createElement('div');
+      insertElement.setAttribute("class", "sig");
+     }
+     else if(GaiaFormat._isCom())
+     {
+      submit_find = GaiaFormat._getElementsByAttribute('Submit', 'value')[0];
+      beforeElement = submit_find;
+      insertData = "<br /><label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
+                   " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
+      for(i in fmtList)
       {
-       submit_find = GaiaFormat._getElementsByAttribute('Submit', 'value')[0];
-       beforeElement = submit_find;
-       insertData = "<br /><label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
-                    " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
-       for(i in fmtList)
+       sVal = fmtList[i];
+       if (sVal.Type_Comm)
        {
-        sVal = fmtList[i];
-        if (sVal.Type_Comm)
-        {
-         if (iIndex == -1 && fFind == sVal.id)
-          iIndex = idx;
-         idx++;
-         insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
-        }
+        if (iIndex == -1 && fFind == sVal.id)
+         iIndex = idx;
+        idx++;
+        insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
        }
-       insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
-                    "</select>";
-       insertData+= " <a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: middle;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
-                    "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\"> ";
-       insertElement = GaiaFormat._contentDoc().createElement('span');
       }
-      else if(GaiaFormat._isGuild())
+      insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
+                   "</select>";
+      insertData+= " <a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: middle;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
+                   "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\"> ";
+      insertElement = GaiaFormat._contentDoc().createElement('span');
+     }
+     else if(GaiaFormat._isGuild())
+     {
+      submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode.parentNode.parentNode.parentNode;
+      beforeElement = null;
+      insertData = "<label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
+                   " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
+      for(i in fmtList)
       {
-       submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode.parentNode.parentNode.parentNode;
-       beforeElement = null;
-       insertData = "<label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
-                    " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
-       for(i in fmtList)
+       sVal = fmtList[i];
+       if (sVal.Type_Guild)
        {
-        sVal = fmtList[i];
-        if (sVal.Type_Guild)
-        {
-         if (iIndex == -1 && fFind == sVal.id)
-          iIndex = idx;
-         idx++;
-         insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
-        }
+        if (iIndex == -1 && fFind == sVal.id)
+         iIndex = idx;
+        idx++;
+        insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
        }
-       insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
-                    "</select>";
-       insertData+= " <a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: middle;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
-                    "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
-       insertElement = GaiaFormat._contentDoc().createElement('div');
-       insertElement.setAttribute("class", "sig");
       }
-      else if(GaiaFormat._isQR())
+      insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
+                   "</select>";
+      insertData+= " <a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: middle;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
+                   "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
+      insertElement = GaiaFormat._contentDoc().createElement('div');
+      insertElement.setAttribute("class", "sig");
+     }
+     else if(GaiaFormat._isQR())
+     {
+      submit_find = doc.getElementById('qr_submit');
+      beforeElement = submit_find;
+      insertData = "<label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
+                   " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
+      for(i in fmtList)
       {
-       submit_find = doc.getElementById('qr_submit');
-       beforeElement = submit_find;
-       insertData = "<label for=\"fmt_selection\">" + GaiaFormat._lclProfile + "</label>" +
-                    " <select name=\"fmtsel_" + Math.random() + "\" id=\"fmt_selection\" />";
-       for(i in fmtList)
+       sVal = fmtList[i];
+       if (sVal.Type_Forum)
        {
-        sVal = fmtList[i];
-        if (sVal.Type_Forum)
-        {
-         if (iIndex == -1 && fFind == sVal.id)
-          iIndex = idx;
-         idx++;
-         insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
-        }
+        if (iIndex == -1 && fFind == sVal.id)
+         iIndex = idx;
+        idx++;
+        insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
        }
-       insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
-                    "</select>";
-       insertData+= "<a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: bottom;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
-                    "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
-       insertElement = GaiaFormat._contentDoc().createElement('span');
-       insertElement.setAttribute("style","margin: 12px 15px 0px 15px; font-size: 11px; vertical-align: middle; display: inline-block;");
-       submit_find.addEventListener("click", GaiaFormat.AutoFormat, true);
-       GaiaFormat.httpRequest.register();
       }
-      else
+      insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>" +
+                   "</select>";
+      insertData+= "<a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\" style=\"vertical-align: bottom;\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
+                   "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
+      insertElement = GaiaFormat._contentDoc().createElement('span');
+      insertElement.setAttribute("style","margin: 12px 15px 0px 15px; font-size: 11px; vertical-align: middle; display: inline-block;");
+      submit_find.addEventListener("click", GaiaFormat.AutoFormat, true);
+      GaiaFormat.httpRequest.register();
+     }
+     else if (GaiaFormat._isNewTopic())
+     {
+      submit_find = doc.getElementById("post_style").getElementsByTagName('h3')[0];
+      beforeElement = null;
+      insertData = "";
+      for(i in fmtList)
       {
-       submit_find = doc.getElementById("post_style").getElementsByTagName('h3')[0];
-       beforeElement = null;
-       insertData = "";
-       for(i in fmtList)
+       sVal = fmtList[i];
+       if (sVal.Type_ForumT)
        {
-        sVal = fmtList[i];
-        if (sVal.Type_Forum && !GaiaFormat._isGuild() && !GaiaFormat._isCom() && !GaiaFormat._isPM())
-        {
-         if (iIndex == -1 && fFind == sVal.id)
-          iIndex = idx;
-         idx++;
-         insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
-        }
+        if (iIndex == -1 && fFind == sVal.id)
+         iIndex = idx;
+        idx++;
+        insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
        }
-       insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>";
-       insertElement = GaiaFormat._contentDoc().createElement('select');
-       insertElement.setAttribute("id", "fmt_selection");
-       insertElement.setAttribute("name", "fmtsel_" + Math.random());
-       insertElement.setAttribute("style", "position: absolute; top: 6px; right: 23px; width: 150px;");
-       var siblingData = "<a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
-                         "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
-       var insertSibling = GaiaFormat._contentDoc().createElement('span');
-       insertSibling.setAttribute("style", "position: absolute; top: 7px; right: 5px; width: 16px;");
-       insertSibling.innerHTML = siblingData;
-       submit_find.parentNode.insertBefore(insertSibling, null);
       }
-      if (submit_find && !doc.getElementById('fmt_selection'))
+      insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>";
+      insertElement = GaiaFormat._contentDoc().createElement('select');
+      insertElement.setAttribute("id", "fmt_selection");
+      insertElement.setAttribute("name", "fmtsel_" + Math.random());
+      insertElement.setAttribute("style", "position: absolute; top: 6px; right: 23px; width: 150px;");
+      var siblingData = "<a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
+                        "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
+      var insertSibling = GaiaFormat._contentDoc().createElement('span');
+      insertSibling.setAttribute("style", "position: absolute; top: 7px; right: 5px; width: 16px;");
+      insertSibling.innerHTML = siblingData;
+      submit_find.parentNode.insertBefore(insertSibling, null);
+     }
+     else
+     {
+      submit_find = doc.getElementById("post_style").getElementsByTagName('h3')[0];
+      beforeElement = null;
+      insertData = "";
+      for(i in fmtList)
       {
-       insertElement.innerHTML = insertData;
-       submit_find.parentNode.insertBefore(insertElement, beforeElement);
-       var selFormat = GaiaFormat._getElementsByAttribute('fmt_selection', 'id')[0];
-       if (alreadyformed)
-        selFormat.selectedIndex = selFormat.length - 1;
-       else if (iIndex > -1)
-        selFormat.selectedIndex = iIndex;
-       GaiaFormat._selIndex = selFormat.value;
-       GaiaFormat._Prefs.setCharPref("Favored", GaiaFormat._selIndex);
+       sVal = fmtList[i];
+       if (sVal.Type_Forum)
+       {
+        if (iIndex == -1 && fFind == sVal.id)
+         iIndex = idx;
+        idx++;
+        insertData+="<option value=\"" + sVal.id + "\">" + sVal.name + "</option>";
+       }
       }
+      insertData+= "<option value=\"none\">" + GaiaFormat._lclDisForm + "</option>";
+      insertElement = GaiaFormat._contentDoc().createElement('select');
+      insertElement.setAttribute("id", "fmt_selection");
+      insertElement.setAttribute("name", "fmtsel_" + Math.random());
+      insertElement.setAttribute("style", "position: absolute; top: 6px; right: 23px; width: 150px;");
+      var siblingData = "<a href=\"//www.gaiaonline.com/favicon.ico#gaiaformat/options\" target=\"optionsGaiaFormat\"><img src=\"" + GaiaFormat._opt64 + "\" alt=\"" + GaiaFormat._lclOptions + "\" title=\"" + GaiaFormat._lclOptions + "\"></a>" +
+                        "<iframe name=\"optionsGaiaFormat\" id=\"optionsGaiaFormat\" src=\"about:blank\" style=\"display: none;\">";
+      var insertSibling = GaiaFormat._contentDoc().createElement('span');
+      insertSibling.setAttribute("style", "position: absolute; top: 7px; right: 5px; width: 16px;");
+      insertSibling.innerHTML = siblingData;
+      submit_find.parentNode.insertBefore(insertSibling, null);
+     }
+     if (submit_find && !doc.getElementById('fmt_selection'))
+     {
+      insertElement.innerHTML = insertData;
+      submit_find.parentNode.insertBefore(insertElement, beforeElement);
+      var selFormat = GaiaFormat._getElementsByAttribute('fmt_selection', 'id')[0];
+      if (alreadyformed)
+       selFormat.selectedIndex = selFormat.length - 1;
+      else if (iIndex != -1)
+       selFormat.selectedIndex = iIndex;
+      GaiaFormat._selIndex = selFormat.value;
+      GaiaFormat._Prefs.setCharPref("Favored", GaiaFormat._selIndex);
      }
     }
-    catch(e){}
-    try
-    {
-     var autoArea = GaiaFormat._getBox();
-     var autoAreaForm = autoArea.form;
-     autoAreaForm.addEventListener("submit", GaiaFormat.AutoFormat, true);
-    }
-    catch(e){}
    }
+   catch(e){}
+   try
+   {
+    var autoArea = GaiaFormat._getBox();
+    var autoAreaForm = autoArea.form;
+    autoAreaForm.addEventListener("submit", GaiaFormat.AutoFormat, true);
+   }
+   catch(e){}
   }
  },
  pagegrabber_start: function()
@@ -244,7 +269,7 @@ var GaiaFormat =
  {
   gBrowser.mPanelContainer.addEventListener("select", GaiaFormat.tablselect, false);
  },
- _isGaia: function()
+ _myLoc: function()
  {
   var x = null;
   try
@@ -255,60 +280,97 @@ var GaiaFormat =
   {
    return false;
   }
-  if (x.indexOf('gaiaonline.com') > 0)
+  return x;
+ },
+ _isGaia: function()
+ {
+  var url = GaiaFormat._myLoc();
+  if (url == false)
+   return false;
+  if (url.indexOf('gaiaonline.com') != -1)
    return true;
   else
    return false;
  },
  _isMsg: function()
  {
-  var x = GaiaFormat._contentDoc().location.href;
-  if (x.indexOf('compose/entry') > 0) return true;
-  if (x.indexOf('compose/topic') > 0) return true;
-  if (x.indexOf('posting.ph') > 0) return true;
-  if (x.indexOf('mode=post') > 0) return true;
-  if (x.indexOf('mode=reply') > 0) return true;
-  if (x.indexOf('mode=entry') > 0) return true;
-  if (x.indexOf('mode=comment') > 0) return true;
-  if (x.indexOf('comment.AddComment') > 0) return true;
-  if (x.indexOf('mode=addcomment') > 0) return true;
-  if (x.indexOf('/t.') > 0) return true;
-  if (x.substr(-11) == 'privmsg.php') return true;
-  if (x.substr(-11) == 'journal.php') return true;
-  if (x.substr(-18) == 'guilds/posting.php') return true;
+  if (GaiaFormat._isGaia == false)
+   return false;
+  var url = GaiaFormat._myLoc();
+  if (url.indexOf('compose/entry') != -1)
+   return true;
+  if (url.indexOf('compose/topic') != -1)
+   return true;
+  if (url.indexOf('posting.ph') != -1)
+   return true;
+  if (url.indexOf('mode=post') != -1)
+   return true;
+  if (url.indexOf('mode=reply') != -1)
+   return true;
+  if (url.indexOf('mode=entry') != -1)
+   return true;
+  if (url.indexOf('mode=comment') != -1)
+   return true;
+  if (url.indexOf('comment.AddComment') != -1)
+   return true;
+  if (url.indexOf('mode=addcomment') != -1)
+   return true;
+  if (url.indexOf('/t.') != -1)
+   return true;
+  if (url.substr(-11) == 'privmsg.php')
+   return true;
+  if (url.substr(-11) == 'journal.php')
+   return true;
+  if (url.substr(-18) == 'guilds/posting.php')
+   return true;
   return false;
  },
  _isGuild: function()
  {
-  var x = GaiaFormat._contentDoc().location.href;
-  if (x.indexOf('gaiaonline.com/guilds') > 0)
-   return true;
-  else
+  if (GaiaFormat._isGaia == false)
    return false;
+  var url = GaiaFormat._myLoc();
+  if (url.indexOf('gaiaonline.com/guilds') == -1)
+   return false;
+  return true;
  },
  _isCom: function()
  {
-  var x = GaiaFormat._contentDoc().location.href;
-  if (x.indexOf('comment.AddComment') > 0 || x.indexOf('mode=addcomment') > 0)
-   return true;
-  else
+  if (GaiaFormat._isGaia == false)
    return false;
+  var url = GaiaFormat._myLoc();
+  if (url.indexOf('comment.AddComment') == -1 && url.indexOf('mode=addcomment') == -1)
+   return false;
+  return true;
  },
  _isPM: function()
  {
-  var x = GaiaFormat._contentDoc().location.href;
-  if (x.indexOf('privmsg.php') > 0)
-   return true;
-  else
+  if (GaiaFormat._isGaia == false)
    return false;
+  var url = GaiaFormat._myLoc();
+  if (url.indexOf('privmsg.php') == -1)
+   return false;
+  return true;
  },
  _isQR: function()
  {
-  var x = GaiaFormat._contentDoc().location.href;
-  if (x.indexOf('/t.') > 0)
-   return true;
-  else
+  if (GaiaFormat._isGaia == false)
    return false;
+  var url = GaiaFormat._myLoc();
+  if (url.indexOf('/t.') === -1)
+   return false;
+  return true;
+ },
+ _isNewTopic: function()
+ {
+  if (GaiaFormat._isGaia == false)
+   return false;
+  var url = GaiaFormat._myLoc();
+  if (url.indexOf('forum/compose/topic') != -1)
+   return true;
+  if (url.indexOf('forum/compose/entry') != -1 && url.indexOf('forum/compose/entry/new') == -1 && url.indexOf("_1/") != -1)
+   return true;
+  return false;
  },
  _getBox: function()
  {
@@ -460,6 +522,7 @@ var GaiaFormat =
      fmtData[iID] = {
       "name": decodeURIComponent(GaiaFormat._Prefs.getCharPref("Format[" + i + "].name")),
       "id": iID,
+      "Type_ForumT": GaiaFormat._Prefs.getBoolPref("Format[" + i + "].Type.ForumT"),
       "Type_Forum": GaiaFormat._Prefs.getBoolPref("Format[" + i + "].Type.Forum"),
       "Type_Guild": GaiaFormat._Prefs.getBoolPref("Format[" + i + "].Type.Guild"),
       "Type_PM": GaiaFormat._Prefs.getBoolPref("Format[" + i + "].Type.PM"),
@@ -489,6 +552,7 @@ var GaiaFormat =
     fmtData['default'] = {
      "name": "Default",
      "id": "default",
+     "Type_ForumT": GaiaFormat._Prefs.getBoolPref("ForumT"),
      "Type_Forum": GaiaFormat._Prefs.getBoolPref("Forum"),
      "Type_Guild": GaiaFormat._Prefs.getBoolPref("Guild"),
      "Type_PM": GaiaFormat._Prefs.getBoolPref("PM"),
@@ -518,6 +582,7 @@ var GaiaFormat =
    {
     "name": "Default",
     "id": "default",
+    "Type_ForumT": true,
     "Type_Forum": true,
     "Type_Guild": true,
     "Type_PM": true,
@@ -549,13 +614,27 @@ var GaiaFormat =
    {
     if(!bFormed && selFormat.value != 'none')
     {
-     if (GaiaFormat._isCom() && fmtList.Type_Comm)
-      GaiaFormat._doFormat();
-     else if (!GaiaFormat._isCom() && GaiaFormat._isPM() && fmtList.Type_PM)
-      GaiaFormat._doFormat();
-     else if (GaiaFormat._isGuild() && fmtList.Type_Guild)
-      GaiaFormat._doFormat();
-     else if (!GaiaFormat._isCom() && !GaiaFormat._isPM() && !GaiaFormat._isGuild() && fmtList.Type_Forum)
+     if (GaiaFormat._isCom())
+     {
+      if(fmtList.Type_Comm)
+       GaiaFormat._doFormat();
+     }
+     else if (GaiaFormat._isPM())
+     {
+      if (fmtList.Type_PM)
+       GaiaFormat._doFormat();
+     }
+     else if (GaiaFormat._isGuild())
+     {
+      if (fmtList.Type_Guild)
+       GaiaFormat._doFormat();
+     }
+     else if (GaiaFormat._isNewTopic())
+     {
+      if (fmtList.Type_ForumT)
+       GaiaFormat._doFormat();
+     }
+     else if (fmtList.Type_Forum)
       GaiaFormat._doFormat();
     }
    }
