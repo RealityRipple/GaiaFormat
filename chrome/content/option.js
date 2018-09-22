@@ -62,6 +62,7 @@ var GaiaFormatDialog =
    GaiaFormatDialog._format[retID] = {
     "name": newName.value,
     "id": retID,
+    "Type_ForumT": true,
     "Type_Forum": true,
     "Type_Guild": true,
     "Type_PM": true,
@@ -116,6 +117,7 @@ var GaiaFormatDialog =
    }
    var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
    document.getElementById("cmbFormat").disabled = false;
+   document.getElementById("chkForumT").disabled = false;
    document.getElementById("chkForum").disabled = false;
    document.getElementById("chkGuild").disabled = false;
    document.getElementById("chkPM").disabled = false;
@@ -124,6 +126,7 @@ var GaiaFormatDialog =
    document.getElementById("txtFormatSuf").disabled = false;
    document.getElementById("cmbStyle").disabled = false;
    document.getElementById("chkExtra").disabled = false;
+   document.getElementById("chkForumT").checked = myFormat.Type_ForumT;
    document.getElementById("chkForum").checked = myFormat.Type_Forum;
    document.getElementById("chkGuild").checked = myFormat.Type_Guild;
    document.getElementById("chkPM").checked = myFormat.Type_PM;
@@ -144,6 +147,7 @@ var GaiaFormatDialog =
   {
    GaiaFormatDialog._fIndex = 'none';
    document.getElementById("cmbFormat").disabled = true;
+   document.getElementById("chkForumT").disabled = true;
    document.getElementById("chkForum").disabled = true;
    document.getElementById("chkGuild").disabled = true;
    document.getElementById("chkPM").disabled = true;
@@ -152,6 +156,7 @@ var GaiaFormatDialog =
    document.getElementById("txtFormatSuf").disabled = true;
    document.getElementById("cmbStyle").disabled = true;
    document.getElementById("chkExtra").disabled = true;
+   document.getElementById("chkForumT").checked = false;
    document.getElementById("chkForum").checked = false;
    document.getElementById("chkGuild").checked = false;
    document.getElementById("chkPM").checked = false;
@@ -275,6 +280,7 @@ var GaiaFormatDialog =
    {
     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].name");
     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].id");
+    GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.ForumT");
     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.Forum");
     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.Guild");
     GaiaFormatDialog._Prefs.deleteBranch("Format[" + i + "].Type.PM");
@@ -286,6 +292,7 @@ var GaiaFormatDialog =
 
     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].name");
     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].id");
+    GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.ForumT");
     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.Forum");
     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.Guild");
     GaiaFormatDialog._Syncs.deleteBranch("Format[" + i + "].Type.PM");
@@ -326,6 +333,7 @@ var GaiaFormatDialog =
    var itm = GaiaFormatDialog._format[i];
    GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].name", itm.name);
    GaiaFormatDialog._Prefs.setCharPref("Format[" + idx + "].id", itm.id);
+   GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.ForumT", itm.Type_ForumT);
    GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.Forum", itm.Type_Forum);
    GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.Guild", itm.Type_Guild);
    GaiaFormatDialog._Prefs.setBoolPref("Format[" + idx + "].Type.PM", itm.Type_PM);
@@ -337,6 +345,7 @@ var GaiaFormatDialog =
 
    GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].name", true);
    GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].id", true);
+   GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.ForumT", true);
    GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.Forum", true);
    GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.Guild", true);
    GaiaFormatDialog._Syncs.setBoolPref("Format[" + idx + "].Type.PM", true);
@@ -397,6 +406,8 @@ var GaiaFormatDialog =
   var pItems = oldPrefs.getChildList("", {});
   if (pItems.length > 0)
    oldPrefs.deleteBranch("");
+  if (GaiaFormatDialog._Prefs.prefHasUserValue("ForumT"))
+   GaiaFormatDialog._Prefs.deleteBranch("ForumT");
   if (GaiaFormatDialog._Prefs.prefHasUserValue("Forum"))
    GaiaFormatDialog._Prefs.deleteBranch("Forum");
   if (GaiaFormatDialog._Prefs.prefHasUserValue("Guild"))
@@ -435,6 +446,8 @@ var GaiaFormatDialog =
   try
   {
    var i = 0;
+   var pForumT, pForum, pGuild, pPM, pComm, pBegin, pEnd, pStyle, pExtras, pExtraItems;
+   var eBegin, eEnd, eLeft, eRight;
    document.getElementById("cmbFormat").removeAllItems();
    var fmtCount = GaiaFormatDialog._Prefs.getIntPref("Formats");
    if (fmtCount > 0)
@@ -456,26 +469,57 @@ var GaiaFormatDialog =
      if (iFound == -1 && fFind == pID)
       iFound = i;
      document.getElementById("cmbFormat").appendItem(pName, pID);
+     try {pForumT = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.ForumT");}
+     catch (e) {pForumT = true;}
+     try {pForumT = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.ForumT");}
+     catch (e) {pForumT = true;}
+     try {pForum = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Forum");}
+     catch (e) {pForum = true;}
+     try {pGuild = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Guild");}
+     catch (e) {pGuild = true;}
+     try {pPM = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.PM");}
+     catch (e) {pPM = true;}
+     try {pComm = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Comm");}
+     catch (e) {pComm = true;}
+     try {pBegin = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Begin"));}
+     catch (e) {pBegin = GaiaFormatDialog._lclPrefix;}
+     try {pEnd = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].End"));}
+     catch (e) {pEnd = GaiaFormatDialog._lclSuffix;}
+     try {pStyle = GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Style");}
+     catch (e) {pStyle = 0;}
+     try {pExtras = GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Extras");}
+     catch (e) {pExtras = false;}
+     try {pExtraItems = GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Extras.Items");}
+     catch (e) {pExtraItems = 0;}
      GaiaFormatDialog._format[pID] = {
       "name": pName,
       "id": pID,
-      "Type_Forum": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Forum"),
-      "Type_Guild": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Guild"),
-      "Type_PM": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.PM"),
-      "Type_Comm": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Type.Comm"),
-      "Begin": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Begin")),
-      "End": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].End")),
-      "Style": GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Style"),
-      "Extras": GaiaFormatDialog._Prefs.getBoolPref("Format[" + i + "].Extras"),
-      "ExtraItems": GaiaFormatDialog._Prefs.getIntPref("Format[" + i + "].Extras.Items"),
+      "Type_ForumT": pForumT,
+      "Type_Forum": pForum,
+      "Type_Guild": pGuild,
+      "Type_PM": pPM,
+      "Type_Comm": pComm,
+      "Begin": pBegin,
+      "End": pEnd,
+      "Style": pStyle,
+      "Extras": pExtras,
+      "ExtraItems": pExtraItems,
       "ExtraItem": []};
      for (var j = 0; j < GaiaFormatDialog._format[pID].ExtraItems; j++)
      {
+      try {eBegin = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Begin[" + j + "]"));}
+      catch (e) {eBegin = '';}
+      try {eEnd = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.End[" + j + "]"));}
+      catch (e) {eEnd = '';}
+      try {eLeft = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Left[" + j + "]"));}
+      catch (e) {eLeft = '';}
+      try {eRight = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Right[" + j + "]"));}
+      catch (e) {eRight = '';}
       GaiaFormatDialog._format[pID].ExtraItem[j] = {
-       "Begin": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Begin[" + j + "]")),
-       "End":   decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.End[" + j + "]")),
-       "Left":  decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Left[" + j + "]")),
-       "Right": decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("Format[" + i + "].Extras.Right[" + j + "]"))
+       "Begin": eBegin,
+       "End":   eEnd,
+       "Left":  eLeft,
+       "Right": eRight
       };
      }
     }
@@ -487,7 +531,8 @@ var GaiaFormatDialog =
    else
    {
     document.getElementById("cmbFormat").appendItem("Default", 'default');
-    var pForum, pGuild, pPM, pComm, pBegin, pEnd, pStyle, pExtras, pExtraItems;
+    try {pForumT = GaiaFormatDialog._Prefs.getBoolPref("ForumT");}
+    catch (e) {pForumT = true;}
     try {pForum = GaiaFormatDialog._Prefs.getBoolPref("Forum");}
     catch (e) {pForum = true;}
     try {pGuild = GaiaFormatDialog._Prefs.getBoolPref("Guild");}
@@ -509,6 +554,7 @@ var GaiaFormatDialog =
     GaiaFormatDialog._format['default'] = {
       "name": "Default",
       "id": 'default',
+      "Type_ForumT": pForumT,
       "Type_Forum": pForum,
       "Type_Guild": pGuild,
       "Type_PM": pPM,
@@ -523,7 +569,6 @@ var GaiaFormatDialog =
     {
      for(i = 0; i < GaiaFormatDialog._format['default'].ExtraItems; i++)
      {
-      var eBegin, eEnd, eLeft, eRight;
       try {eBegin = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("EBegin[" + i + "]"));}
       catch (e) {eBegin = '';}
       try {eEnd = decodeURIComponent(GaiaFormatDialog._Prefs.getCharPref("EEnd[" + i + "]"));}
@@ -549,6 +594,7 @@ var GaiaFormatDialog =
    GaiaFormatDialog._format['default'] = {
      "name": "Default",
      "id": 'default',
+     "Type_ForumT": true,
      "Type_Forum": true,
      "Type_Guild": true,
      "Type_PM": true,
@@ -566,6 +612,7 @@ var GaiaFormatDialog =
  populateFormat: function()
  {
   var myFormat = GaiaFormatDialog._format[GaiaFormatDialog._fIndex];
+  myFormat.Type_ForumT = document.getElementById("chkForumT").checked;
   myFormat.Type_Forum = document.getElementById("chkForum").checked;
   myFormat.Type_Guild = document.getElementById("chkGuild").checked;
   myFormat.Type_PM = document.getElementById("chkPM").checked;
@@ -578,7 +625,7 @@ var GaiaFormatDialog =
  },
  postCheck: function()
  {
-  document.getElementById('cmbStyle').disabled  = !(document.getElementById('chkForum').checked);
+  document.getElementById('cmbStyle').disabled  = !(document.getElementById('chkForum').checked || document.getElementById('chkForumT').checked );
   document.getElementById('lstExtras').disabled = !(document.getElementById('chkExtra').checked);
   document.getElementById('cmdAdd').disabled    = !(document.getElementById('chkExtra').checked);
   document.getElementById('cmdRem').disabled    = !(document.getElementById('chkExtra').checked);
@@ -636,6 +683,7 @@ var GaiaFormatDialog =
    sFile+= '  <prefix>' + encodeURIComponent(myFormat.Begin) + '</prefix>' + nl;
    sFile+= '  <suffix>' + encodeURIComponent(myFormat.End) + '</suffix>' + nl;
    sFile+= '  <message>' + nl;
+   sFile+= '   <forumtopic>' + myFormat.Type_ForumT + '</forumtopic>' + nl;
    sFile+= '   <forum>' + myFormat.Type_Forum + '</forum>' + nl;
    sFile+= '   <pm>' + myFormat.Type_PM + '</pm>' + nl;
    sFile+= '   <guild>' + myFormat.Type_Guild + '</guild>' + nl;
@@ -697,6 +745,9 @@ var GaiaFormatDialog =
    case 'message':
     switch(GaiaFormatDialog._xml_element)
     {
+     case 'forumtopic':
+      myFormat.Type_ForumT = (GaiaFormatDialog._xml_value == 'true');
+      break;
      case 'forum':
       myFormat.Type_Forum = (GaiaFormatDialog._xml_value == 'true');
       break;
