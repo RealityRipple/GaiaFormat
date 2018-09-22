@@ -34,11 +34,12 @@
       <caption label="&messages.title;" />
       <hbox>
        <vbox>
-        <checkbox id="chkForum" label="&forum.label;"     oncommand="GaiaFormatDialog.populateFormat();" />
-        <checkbox id="chkPM"    label="&pm.label;"        oncommand="GaiaFormatDialog.populateFormat();"/>
+        <checkbox id="chkForumT"  label="&forumt.label;"  oncommand="GaiaFormatDialog.populateFormat();" />
+        <checkbox id="chkPM"      label="&pm.label;"      oncommand="GaiaFormatDialog.populateFormat();"/>
+        <checkbox id="chkGuild"   label="&guild.label;"   oncommand="GaiaFormatDialog.populateFormat();" />
        </vbox>
        <vbox>
-        <checkbox id="chkGuild"   label="&guild.label;"   oncommand="GaiaFormatDialog.populateFormat();" />
+        <checkbox id="chkForum"   label="&forum.label;"   oncommand="GaiaFormatDialog.populateFormat();" />
         <checkbox id="chkComment" label="&comment.label;" oncommand="GaiaFormatDialog.populateFormat();" />
        </vbox>
       </hbox>
