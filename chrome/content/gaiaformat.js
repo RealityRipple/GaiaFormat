@@ -50,8 +50,17 @@ var GaiaFormat =
     var postBox = GaiaFormat._getBox();
     var postcheck = GaiaFormat._trim(postBox.value);
     var alreadyformed = false;
-    if (postcheck.indexOf('[quote]') != -1 && postcheck.substr(-8) != '[/quote]' || postcheck.indexOf('[/quote]') < 0 && postcheck.length > 0)
+    if ((postcheck.indexOf('[quote]') != -1 && postcheck.substr(-8) != '[/quote]') || (postcheck.indexOf('[/quote]') == -1 && postcheck.length > 0))
      alreadyformed = true;
+    for(i in fmtList)
+    {
+     sVal = fmtList[i];
+     if (postcheck.substr(sVal.End.length * -1) == sVal.End)
+     {
+      alreadyformed = true;
+      break;
+     }
+    }
     if (!doc.getElementById('fmt_selection'))
     {
      var fFind = '';
