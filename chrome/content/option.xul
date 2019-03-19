@@ -47,20 +47,22 @@
      <label control="cmbStyle" value="&style.label;" />
      <menulist id="cmbStyle" oncommand="GaiaFormatDialog.populateFormat();">
       <menupopup>
-       <menuitem label="&style.normal;"   value="0"/>
-       <menuitem label="&style.whisper;"  value="1"/>
-       <menuitem label="&style.shout;"    value="2"/>
-       <menuitem label="&style.think;"    value="3"/>
-       <menuitem label="&style.document;" value="4"/>
-       <menuitem label="&style.ornate;"   value="5"/>
-       <menuitem label="&style.ghost;"    value="6"/>
-       <menuitem label="&style.star;"     value="7"/>
-       <menuitem label="&style.chain;"    value="8"/>
-       <menuitem label="&style.rainbow;"  value="9"/>
-       <menuitem label="&style.prism;"    value="10"/>
-       <menuitem label="&style.drippy;"   value="11"/>
-       <menuitem label="&style.thorny;"   value="12"/>
-       <menuitem label="&style.sakura;"   value="13"/>
+       <menuitem label="&style.normal;"    value="0"/>
+       <menuitem label="&style.whisper;"   value="1"/>
+       <menuitem label="&style.shout;"     value="2"/>
+       <menuitem label="&style.think;"     value="3"/>
+       <menuitem label="&style.document;"  value="4"/>
+       <menuitem label="&style.ornate;"    value="5"/>
+       <menuitem label="&style.ghost;"     value="6"/>
+       <menuitem label="&style.star;"      value="7"/>
+       <menuitem label="&style.chain;"     value="8"/>
+       <menuitem label="&style.rainbow;"   value="9"/>
+       <menuitem label="&style.prism;"     value="10"/>
+       <menuitem label="&style.drippy;"    value="11"/>
+       <menuitem label="&style.thorny;"    value="12"/>
+       <menuitem label="&style.sakura;"    value="13"/>
+       <menuitem label="&style.sprinkles;" value="14"/>
+       <menuitem label="&style.paw;"       value="15"/>
       </menupopup>
      </menulist>
     </vbox>

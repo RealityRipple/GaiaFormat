@@ -26,6 +26,8 @@
 <!ENTITY style.drippy "Drippy">
 <!ENTITY style.thorny "Thorny">
 <!ENTITY style.sakura "Sakura">
+<!ENTITY style.sprinkles "Sprinkles">
+<!ENTITY style.paw "Paw">
 <!ENTITY addcmd.label "Lägg till">
 <!ENTITY remcmd.label "Ta bort">
 <!ENTITY impcmd.label "Importera…">

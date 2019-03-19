@@ -26,6 +26,8 @@
 <!ENTITY style.drippy "Чутливий">
 <!ENTITY style.thorny "Колючий">
 <!ENTITY style.sakura "Сакура">
+<!ENTITY style.sprinkles "Sprinkles">
+<!ENTITY style.paw "Paw">
 <!ENTITY addcmd.label "Додати">
 <!ENTITY remcmd.label "Вилучити">
 <!ENTITY impcmd.label "Імпорт…">

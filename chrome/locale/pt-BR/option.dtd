@@ -26,6 +26,8 @@
 <!ENTITY style.drippy "Drippy">
 <!ENTITY style.thorny "Thorny">
 <!ENTITY style.sakura "Sakura">
+<!ENTITY style.sprinkles "Sprinkles">
+<!ENTITY style.paw "Paw">
 <!ENTITY addcmd.label "Acrescentar">
 <!ENTITY remcmd.label "Remover">
 <!ENTITY impcmd.label "Importar...">
