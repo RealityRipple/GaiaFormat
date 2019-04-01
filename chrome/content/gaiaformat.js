@@ -426,7 +426,7 @@ var GaiaFormat =
      else if(sFind.lastIndexOf('[imgright]') > sFind.lastIndexOf('[/imgright]')){}
      else if(sFind.lastIndexOf('[imgmap]') > sFind.lastIndexOf('[/imgmap]')){}
      else if(sFind.lastIndexOf('[code]') > sFind.lastIndexOf('[/code]')){}
-     else if(sFind.slice(-1) === '[' && decodeURIComponent(sIn.substring(lLeft + sLeft.length)).substring(0, 1) === ']'){}
+     else if(sFind.slice(-1) === '[' && decodeURIComponent(sIn.substring(lLeft + sLeft.length)).substring(0, 1) === ']'){lLook = lLeft + 1;}
      else
      {
       sIn   = sIn.substring(0, lLeft) + sBegin + sIn.substring(lLeft, lRight + sRight.length) + sEnd + sIn.substring(lRight + sRight.length);
