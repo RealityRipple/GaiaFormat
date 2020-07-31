@@ -1,6 +1,6 @@
 var GaiaFormatPrefDisp =
 {
- _timer: Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer),
+ _timer: Components.classes['@mozilla.org/timer;1'].createInstance(Components.interfaces.nsITimer),
  Listen: function()
  {
   window.removeEventListener('load', GaiaFormatPrefDisp.Listen, false);
@@ -10,7 +10,7 @@ var GaiaFormatPrefDisp =
  {
   if (winLoc.indexOf('#') > -1)
   {
-   if (winLoc.substr(winLoc.indexOf('#'), 19) == "#gaiaformat/options")
+   if (winLoc.substr(winLoc.indexOf('#'), 19) == '#gaiaformat/options')
    {
     GaiaFormatPrefDisp._timer.init(GaiaFormatPrefDisp.event, 250, Components.interfaces.nsITimer.TYPE_ONE_SHOT);  
    }
