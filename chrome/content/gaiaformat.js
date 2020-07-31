@@ -177,7 +177,28 @@ var GaiaFormat =
      }
      else if (GaiaFormat._isNewTopic())
      {
-      submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
+      if(doc.getElementById('post_style') === null)
+      {
+       if(doc.getElementById('post_action') !== null)
+       {
+        let insertNewTopicBox = GaiaFormat._contentDoc().createElement('div');
+        insertNewTopicBox.setAttribute('id', 'gf_post_style');
+        insertNewTopicBox.setAttribute('class', 'gaia-info nofooter');
+        insertNewTopicBox.innerHTML = '<div class="hd">' +
+         '<div class="rc_top_left">&nbsp;</div>' +
+         '<div class="rc_top_right">&nbsp;</div>' +
+         '<h3 id="yui-gen6">Post Style</h3>' +
+         '</div>' +
+         '<div class="ft" id="yui-gen20">' +
+         '<div class="rc_bottom_left">&nbsp;</div>' +
+         '<div class="rc_bottom_right">&nbsp;</div>' +
+         '</div>';
+        doc.getElementById('post_action').parentElement.insertBefore(insertNewTopicBox, doc.getElementById('post_action'));
+        submit_find = doc.getElementById('gf_post_style').getElementsByTagName('h3')[0];
+       }
+      }
+      else
+       submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
       beforeElement = null;
       insertData = '';
       for(i in fmtList)
@@ -205,7 +226,28 @@ var GaiaFormat =
      }
      else
      {
-      submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
+      if(doc.getElementById('post_style') === null)
+      {
+       if(doc.getElementById('post_action') !== null)
+       {
+        let insertReplyBox = GaiaFormat._contentDoc().createElement('div');
+        insertReplyBox.setAttribute('id', 'gf_post_style');
+        insertReplyBox.setAttribute('class', 'gaia-info nofooter');
+        insertReplyBox.innerHTML = '<div class="hd">' +
+         '<div class="rc_top_left">&nbsp;</div>' +
+         '<div class="rc_top_right">&nbsp;</div>' +
+         '<h3 id="yui-gen6">Post Style</h3>' +
+         '</div>' +
+         '<div class="ft" id="yui-gen20">' +
+         '<div class="rc_bottom_left">&nbsp;</div>' +
+         '<div class="rc_bottom_right">&nbsp;</div>' +
+         '</div>';
+        doc.getElementById('post_action').parentElement.insertBefore(insertReplyBox, doc.getElementById('post_action'));
+        submit_find = doc.getElementById('gf_post_style').getElementsByTagName('h3')[0];
+       }
+      }
+      else
+       submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
       beforeElement = null;
       insertData = '';
       for(i in fmtList)
