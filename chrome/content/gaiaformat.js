@@ -42,260 +42,263 @@ var GaiaFormat =
  {
   var i = 0;
   var sVal = '';
-  if (GaiaFormat._isGaia() && GaiaFormat._isMsg() && !doc.getElementById('fmt_detector'))
+  if (!GaiaFormat._isGaia())
+   return;
+  if (!GaiaFormat._isMsg())
+   return;
+  if(doc.getElementById('fmt_detector'))
+   return;
+  var fmtList = GaiaFormat._formatList();
+  try
   {
-   var fmtList = GaiaFormat._formatList();
-   try
+   var postBox = GaiaFormat._getBox();
+   var postcheck = GaiaFormat._trim(postBox.value);
+   var alreadyformed = false;
+   if ((postcheck.indexOf('[quote]') != -1 && postcheck.substr(-8) != '[/quote]') || (postcheck.indexOf('[/quote]') == -1 && postcheck.length > 0))
+    alreadyformed = true;
+   for(i in fmtList)
    {
-    var postBox = GaiaFormat._getBox();
-    var postcheck = GaiaFormat._trim(postBox.value);
-    var alreadyformed = false;
-    if ((postcheck.indexOf('[quote]') != -1 && postcheck.substr(-8) != '[/quote]') || (postcheck.indexOf('[/quote]') == -1 && postcheck.length > 0))
+    sVal = fmtList[i];
+    if (postcheck.substr(sVal.End.length * -1) == sVal.End)
+    {
      alreadyformed = true;
-    for(i in fmtList)
-    {
-     sVal = fmtList[i];
-     if (postcheck.substr(sVal.End.length * -1) == sVal.End)
-     {
-      alreadyformed = true;
-      break;
-     }
+     break;
     }
-    if (!doc.getElementById('fmt_selection'))
+   }
+   if (!doc.getElementById('fmt_selection'))
+   {
+    var fFind = '';
+    var iIndex = -1;
+    try
     {
-     var fFind = '';
-     var iIndex = -1;
-     try
+     fFind = GaiaFormat._Prefs.getCharPref('Favored');
+    }
+    catch(e)
+    {
+     iIndex = 0;
+    }
+    var idx = 0;
+    var submit_find;
+    var insertData = '';
+    var insertElement;
+    var beforeElement;
+    if (GaiaFormat._isPM())
+    {
+     submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode;
+     beforeElement = null;
+     insertData = '<label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
+                  ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
+     for(i in fmtList)
      {
-      fFind = GaiaFormat._Prefs.getCharPref('Favored');
-     }
-     catch(e)
-     {
-      iIndex = 0;
-     }
-     var idx = 0;
-     var submit_find;
-     var insertData = '';
-     var insertElement;
-     var beforeElement;
-     if (GaiaFormat._isPM())
-     {
-      submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode;
-      beforeElement = null;
-      insertData = '<label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
-                   ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
-      for(i in fmtList)
+      sVal = fmtList[i];
+      if (sVal.Type_PM)
       {
-       sVal = fmtList[i];
-       if (sVal.Type_PM)
-       {
-        if (iIndex == -1 && fFind == sVal.id)
-         iIndex = idx;
-        idx++;
-        insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
-       }
+       if (iIndex == -1 && fFind == sVal.id)
+        iIndex = idx;
+       idx++;
+       insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
       }
-      insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
-                   '</select>';
-      insertData+= ' <a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: middle;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
-                   '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;"> ';
-      insertElement = GaiaFormat._contentDoc().createElement('div');
-      insertElement.setAttribute('class', 'sig');
      }
-     else if(GaiaFormat._isCom())
+     insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
+                  '</select>';
+     insertData+= ' <a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: middle;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+                  '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;"> ';
+     insertElement = GaiaFormat._contentDoc().createElement('div');
+     insertElement.setAttribute('class', 'sig');
+    }
+    else if(GaiaFormat._isCom())
+    {
+     submit_find = GaiaFormat._getElementsByAttribute('Submit', 'value')[0];
+     beforeElement = submit_find;
+     insertData = '<br /><label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
+                  ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
+     for(i in fmtList)
      {
-      submit_find = GaiaFormat._getElementsByAttribute('Submit', 'value')[0];
-      beforeElement = submit_find;
-      insertData = '<br /><label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
-                   ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
-      for(i in fmtList)
+      sVal = fmtList[i];
+      if (sVal.Type_Comm)
       {
-       sVal = fmtList[i];
-       if (sVal.Type_Comm)
-       {
-        if (iIndex == -1 && fFind == sVal.id)
-         iIndex = idx;
-        idx++;
-        insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
-       }
+       if (iIndex == -1 && fFind == sVal.id)
+        iIndex = idx;
+       idx++;
+       insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
       }
-      insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
-                   '</select>';
-      insertData+= ' <a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: middle;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
-                   '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;"> ';
-      insertElement = GaiaFormat._contentDoc().createElement('span');
      }
-     else if(GaiaFormat._isGuild())
+     insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
+                  '</select>';
+     insertData+= ' <a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: middle;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+                  '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;"> ';
+     insertElement = GaiaFormat._contentDoc().createElement('span');
+    }
+    else if(GaiaFormat._isGuild())
+    {
+     submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode.parentNode.parentNode.parentNode;
+     beforeElement = null;
+     insertData = '<label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
+                  ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
+     for(i in fmtList)
      {
-      submit_find = GaiaFormat._getElementsByAttribute('attach_sig', 'name')[0].parentNode.parentNode.parentNode.parentNode;
-      beforeElement = null;
-      insertData = '<label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
-                   ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
-      for(i in fmtList)
+      sVal = fmtList[i];
+      if (sVal.Type_Guild)
       {
-       sVal = fmtList[i];
-       if (sVal.Type_Guild)
-       {
-        if (iIndex == -1 && fFind == sVal.id)
-         iIndex = idx;
-        idx++;
-        insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
-       }
+       if (iIndex == -1 && fFind == sVal.id)
+        iIndex = idx;
+       idx++;
+       insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
       }
-      insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
-                   '</select>';
-      insertData+= ' <a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: middle;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
-                   '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
-      insertElement = GaiaFormat._contentDoc().createElement('div');
-      insertElement.setAttribute('class', 'sig');
      }
-     else if(GaiaFormat._isQR())
+     insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
+                  '</select>';
+     insertData+= ' <a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: middle;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+                  '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
+     insertElement = GaiaFormat._contentDoc().createElement('div');
+     insertElement.setAttribute('class', 'sig');
+    }
+    else if(GaiaFormat._isQR())
+    {
+     submit_find = doc.getElementById('qr_submit');
+     beforeElement = submit_find;
+     insertData = '<label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
+                  ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
+     for(i in fmtList)
      {
-      submit_find = doc.getElementById('qr_submit');
-      beforeElement = submit_find;
-      insertData = '<label for="fmt_selection">' + GaiaFormat._lclProfile + '</label>' +
-                   ' <select name="fmtsel_' + Math.random() + '" id="fmt_selection" />';
-      for(i in fmtList)
+      sVal = fmtList[i];
+      if (sVal.Type_Forum)
       {
-       sVal = fmtList[i];
-       if (sVal.Type_Forum)
-       {
-        if (iIndex == -1 && fFind == sVal.id)
-         iIndex = idx;
-        idx++;
-        insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
-       }
+       if (iIndex == -1 && fFind == sVal.id)
+        iIndex = idx;
+       idx++;
+       insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
       }
-      insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
-                   '</select>';
-      insertData+= '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: bottom;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
-                   '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
-      insertElement = GaiaFormat._contentDoc().createElement('span');
-      insertElement.setAttribute('style','margin: 12px 15px 0px 15px; font-size: 11px; vertical-align: middle; display: inline-block;');
-      submit_find.addEventListener('click', GaiaFormat.AutoFormat, true);
-      GaiaFormat.httpRequest.register();
      }
-     else if (GaiaFormat._isNewTopic())
+     insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>' +
+                  '</select>';
+     insertData+= '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat" style="vertical-align: bottom;"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+                  '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
+     insertElement = GaiaFormat._contentDoc().createElement('span');
+     insertElement.setAttribute('style','margin: 12px 15px 0px 15px; font-size: 11px; vertical-align: middle; display: inline-block;');
+     submit_find.addEventListener('click', GaiaFormat.AutoFormat, true);
+     GaiaFormat.httpRequest.register();
+    }
+    else if (GaiaFormat._isNewTopic())
+    {
+     if(doc.getElementById('post_style') === null)
      {
-      if(doc.getElementById('post_style') === null)
+      if(doc.getElementById('post_action') !== null)
       {
-       if(doc.getElementById('post_action') !== null)
-       {
-        let insertNewTopicBox = GaiaFormat._contentDoc().createElement('div');
-        insertNewTopicBox.setAttribute('id', 'gf_post_style');
-        insertNewTopicBox.setAttribute('class', 'gaia-info nofooter');
-        insertNewTopicBox.innerHTML = '<div class="hd">' +
-         '<div class="rc_top_left">&nbsp;</div>' +
-         '<div class="rc_top_right">&nbsp;</div>' +
-         '<h3 id="yui-gen6">Post Style</h3>' +
-         '</div>' +
-         '<div class="ft" id="yui-gen20">' +
-         '<div class="rc_bottom_left">&nbsp;</div>' +
-         '<div class="rc_bottom_right">&nbsp;</div>' +
-         '</div>';
-        doc.getElementById('post_action').parentElement.insertBefore(insertNewTopicBox, doc.getElementById('post_action'));
-        submit_find = doc.getElementById('gf_post_style').getElementsByTagName('h3')[0];
-       }
+       let insertNewTopicBox = GaiaFormat._contentDoc().createElement('div');
+       insertNewTopicBox.setAttribute('id', 'gf_post_style');
+       insertNewTopicBox.setAttribute('class', 'gaia-info nofooter');
+       insertNewTopicBox.innerHTML = '<div class="hd">' +
+        '<div class="rc_top_left">&nbsp;</div>' +
+        '<div class="rc_top_right">&nbsp;</div>' +
+        '<h3 id="yui-gen6">Post Style</h3>' +
+        '</div>' +
+        '<div class="ft" id="yui-gen20">' +
+        '<div class="rc_bottom_left">&nbsp;</div>' +
+        '<div class="rc_bottom_right">&nbsp;</div>' +
+        '</div>';
+       doc.getElementById('post_action').parentElement.insertBefore(insertNewTopicBox, doc.getElementById('post_action'));
+       submit_find = doc.getElementById('gf_post_style').getElementsByTagName('h3')[0];
       }
-      else
-       submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
-      beforeElement = null;
-      insertData = '';
-      for(i in fmtList)
-      {
-       sVal = fmtList[i];
-       if (sVal.Type_ForumT)
-       {
-        if (iIndex == -1 && fFind == sVal.id)
-         iIndex = idx;
-        idx++;
-        insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
-       }
-      }
-      insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>';
-      insertElement = GaiaFormat._contentDoc().createElement('select');
-      insertElement.setAttribute('id', 'fmt_selection');
-      insertElement.setAttribute('name', 'fmtsel_' + Math.random());
-      insertElement.setAttribute('style', 'position: absolute; top: 6px; right: 23px; width: 150px;');
-      var siblingData = '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
-                        '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
-      var insertSibling = GaiaFormat._contentDoc().createElement('span');
-      insertSibling.setAttribute('style', 'position: absolute; top: 7px; right: 5px; width: 16px;');
-      insertSibling.innerHTML = siblingData;
-      submit_find.parentNode.insertBefore(insertSibling, null);
      }
      else
+      submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
+     beforeElement = null;
+     insertData = '';
+     for(i in fmtList)
      {
-      if(doc.getElementById('post_style') === null)
+      sVal = fmtList[i];
+      if (sVal.Type_ForumT)
       {
-       if(doc.getElementById('post_action') !== null)
-       {
-        let insertReplyBox = GaiaFormat._contentDoc().createElement('div');
-        insertReplyBox.setAttribute('id', 'gf_post_style');
-        insertReplyBox.setAttribute('class', 'gaia-info nofooter');
-        insertReplyBox.innerHTML = '<div class="hd">' +
-         '<div class="rc_top_left">&nbsp;</div>' +
-         '<div class="rc_top_right">&nbsp;</div>' +
-         '<h3 id="yui-gen6">Post Style</h3>' +
-         '</div>' +
-         '<div class="ft" id="yui-gen20">' +
-         '<div class="rc_bottom_left">&nbsp;</div>' +
-         '<div class="rc_bottom_right">&nbsp;</div>' +
-         '</div>';
-        doc.getElementById('post_action').parentElement.insertBefore(insertReplyBox, doc.getElementById('post_action'));
-        submit_find = doc.getElementById('gf_post_style').getElementsByTagName('h3')[0];
-       }
+       if (iIndex == -1 && fFind == sVal.id)
+        iIndex = idx;
+       idx++;
+       insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
       }
-      else
-       submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
-      beforeElement = null;
-      insertData = '';
-      for(i in fmtList)
-      {
-       sVal = fmtList[i];
-       if (sVal.Type_Forum)
-       {
-        if (iIndex == -1 && fFind == sVal.id)
-         iIndex = idx;
-        idx++;
-        insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
-       }
-      }
-      insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>';
-      insertElement = GaiaFormat._contentDoc().createElement('select');
-      insertElement.setAttribute('id', 'fmt_selection');
-      insertElement.setAttribute('name', 'fmtsel_' + Math.random());
-      insertElement.setAttribute('style', 'position: absolute; top: 6px; right: 23px; width: 150px;');
-      var siblingData = '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
-                        '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
-      var insertSibling = GaiaFormat._contentDoc().createElement('span');
-      insertSibling.setAttribute('style', 'position: absolute; top: 7px; right: 5px; width: 16px;');
-      insertSibling.innerHTML = siblingData;
-      submit_find.parentNode.insertBefore(insertSibling, null);
      }
-     if (submit_find && !doc.getElementById('fmt_selection'))
+     insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>';
+     insertElement = GaiaFormat._contentDoc().createElement('select');
+     insertElement.setAttribute('id', 'fmt_selection');
+     insertElement.setAttribute('name', 'fmtsel_' + Math.random());
+     insertElement.setAttribute('style', 'position: absolute; top: 6px; right: 23px; width: 150px;');
+     var siblingData = '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+                       '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
+     var insertSibling = GaiaFormat._contentDoc().createElement('span');
+     insertSibling.setAttribute('style', 'position: absolute; top: 7px; right: 5px; width: 16px;');
+     insertSibling.innerHTML = siblingData;
+     submit_find.parentNode.insertBefore(insertSibling, null);
+    }
+    else
+    {
+     if(doc.getElementById('post_style') === null)
      {
-      insertElement.innerHTML = insertData;
-      submit_find.parentNode.insertBefore(insertElement, beforeElement);
-      var selFormat = GaiaFormat._getElementsByAttribute('fmt_selection', 'id')[0];
-      if (alreadyformed)
-       selFormat.selectedIndex = selFormat.length - 1;
-      else if (iIndex != -1)
-       selFormat.selectedIndex = iIndex;
-      GaiaFormat._selIndex = selFormat.value;
-      GaiaFormat._Prefs.setCharPref('Favored', GaiaFormat._selIndex);
+      if(doc.getElementById('post_action') !== null)
+      {
+       let insertReplyBox = GaiaFormat._contentDoc().createElement('div');
+       insertReplyBox.setAttribute('id', 'gf_post_style');
+       insertReplyBox.setAttribute('class', 'gaia-info nofooter');
+       insertReplyBox.innerHTML = '<div class="hd">' +
+        '<div class="rc_top_left">&nbsp;</div>' +
+        '<div class="rc_top_right">&nbsp;</div>' +
+        '<h3 id="yui-gen6">Post Style</h3>' +
+        '</div>' +
+        '<div class="ft" id="yui-gen20">' +
+        '<div class="rc_bottom_left">&nbsp;</div>' +
+        '<div class="rc_bottom_right">&nbsp;</div>' +
+        '</div>';
+       doc.getElementById('post_action').parentElement.insertBefore(insertReplyBox, doc.getElementById('post_action'));
+       submit_find = doc.getElementById('gf_post_style').getElementsByTagName('h3')[0];
+      }
      }
+     else
+      submit_find = doc.getElementById('post_style').getElementsByTagName('h3')[0];
+     beforeElement = null;
+     insertData = '';
+     for(i in fmtList)
+     {
+      sVal = fmtList[i];
+      if (sVal.Type_Forum)
+      {
+       if (iIndex == -1 && fFind == sVal.id)
+        iIndex = idx;
+       idx++;
+       insertData+='<option value="' + sVal.id + '">' + sVal.name + '</option>';
+      }
+     }
+     insertData+= '<option value="none">' + GaiaFormat._lclDisForm + '</option>';
+     insertElement = GaiaFormat._contentDoc().createElement('select');
+     insertElement.setAttribute('id', 'fmt_selection');
+     insertElement.setAttribute('name', 'fmtsel_' + Math.random());
+     insertElement.setAttribute('style', 'position: absolute; top: 6px; right: 23px; width: 150px;');
+     var siblingData = '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+                       '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
+     var insertSibling = GaiaFormat._contentDoc().createElement('span');
+     insertSibling.setAttribute('style', 'position: absolute; top: 7px; right: 5px; width: 16px;');
+     insertSibling.innerHTML = siblingData;
+     submit_find.parentNode.insertBefore(insertSibling, null);
+    }
+    if (submit_find && !doc.getElementById('fmt_selection'))
+    {
+     insertElement.innerHTML = insertData;
+     submit_find.parentNode.insertBefore(insertElement, beforeElement);
+     var selFormat = GaiaFormat._getElementsByAttribute('fmt_selection', 'id')[0];
+     if (alreadyformed)
+      selFormat.selectedIndex = selFormat.length - 1;
+     else if (iIndex != -1)
+      selFormat.selectedIndex = iIndex;
+     GaiaFormat._selIndex = selFormat.value;
+     GaiaFormat._Prefs.setCharPref('Favored', GaiaFormat._selIndex);
     }
    }
-   catch(e){}
-   try
-   {
-    var autoArea = GaiaFormat._getBox();
-    var autoAreaForm = autoArea.form;
-    autoAreaForm.addEventListener('submit', GaiaFormat.AutoFormat, true);
-   }
-   catch(e){}
   }
+  catch(e){}
+  try
+  {
+   var autoArea = GaiaFormat._getBox();
+   var autoAreaForm = autoArea.form;
+   autoAreaForm.addEventListener('submit', GaiaFormat.AutoFormat, true);
+  }
+  catch(e){}
  },
  pagegrabber_start: function()
  {
