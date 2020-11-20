@@ -223,12 +223,12 @@ var GaiaFormat =
      insertElement.setAttribute('id', 'fmt_selection');
      insertElement.setAttribute('name', 'fmtsel_' + Math.random());
      insertElement.setAttribute('style', 'position: absolute; top: 6px; right: 23px; width: 150px;');
-     var siblingData = '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
+     var newSiblingData = '<a href="//www.gaiaonline.com/favicon.ico#gaiaformat/options" target="optionsGaiaFormat"><img src="' + GaiaFormat._opt64 + '" alt="' + GaiaFormat._lclOptions + '" title="' + GaiaFormat._lclOptions + '"></a>' +
                        '<iframe name="optionsGaiaFormat" id="optionsGaiaFormat" src="about:blank" style="display: none;">';
-     var insertSibling = GaiaFormat._contentDoc().createElement('span');
-     insertSibling.setAttribute('style', 'position: absolute; top: 7px; right: 5px; width: 16px;');
-     insertSibling.innerHTML = siblingData;
-     submit_find.parentNode.insertBefore(insertSibling, null);
+     var insertNewSibling = GaiaFormat._contentDoc().createElement('span');
+     insertNewSibling.setAttribute('style', 'position: absolute; top: 7px; right: 5px; width: 16px;');
+     insertNewSibling.innerHTML = newSiblingData;
+     submit_find.parentNode.insertBefore(insertNewSibling, null);
     }
     else
     {
