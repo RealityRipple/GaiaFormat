@@ -187,7 +187,7 @@ var GaiaFormat =
      {
       if(doc.getElementById('post_action') !== null)
       {
-       let insertNewTopicBox = GaiaFormat._contentDoc().createElement('div');
+       var insertNewTopicBox = GaiaFormat._contentDoc().createElement('div');
        insertNewTopicBox.setAttribute('id', 'gf_post_style');
        insertNewTopicBox.setAttribute('class', 'gaia-info nofooter');
        insertNewTopicBox.innerHTML = '<div class="hd">' +
@@ -236,7 +236,7 @@ var GaiaFormat =
      {
       if(doc.getElementById('post_action') !== null)
       {
-       let insertReplyBox = GaiaFormat._contentDoc().createElement('div');
+       var insertReplyBox = GaiaFormat._contentDoc().createElement('div');
        insertReplyBox.setAttribute('id', 'gf_post_style');
        insertReplyBox.setAttribute('class', 'gaia-info nofooter');
        insertReplyBox.innerHTML = '<div class="hd">' +
