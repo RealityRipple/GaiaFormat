@@ -48,10 +48,12 @@ var GaiaFormat =
    return;
   if(doc.getElementById('fmt_detector'))
    return;
+  var postBox = GaiaFormat._getBox();
+  if (!postBox)
+   return;
   var fmtList = GaiaFormat._formatList();
   try
   {
-   var postBox = GaiaFormat._getBox();
    var postcheck = GaiaFormat._trim(postBox.value);
    var alreadyformed = false;
    if ((postcheck.indexOf('[quote]') != -1 && postcheck.substr(-8) != '[/quote]') || (postcheck.indexOf('[/quote]') == -1 && postcheck.length > 0))
@@ -294,8 +296,7 @@ var GaiaFormat =
   catch(e){}
   try
   {
-   var autoArea = GaiaFormat._getBox();
-   var autoAreaForm = autoArea.form;
+   var autoAreaForm = postBox.form;
    autoAreaForm.addEventListener('submit', GaiaFormat.AutoFormat, true);
   }
   catch(e){}
@@ -491,6 +492,8 @@ var GaiaFormat =
   var fmtEnd    = fmtList.End;
   var fmtStyle  = fmtList.Style;
   var post  = GaiaFormat._getBox();
+  if (!post)
+   return;
   var postx = post.value+'';
   if (!GaiaFormat._isCom() && !GaiaFormat._isPM() && !GaiaFormat._isGuild())
   {
@@ -658,8 +661,11 @@ var GaiaFormat =
   try
   {
    var doc  = gBrowser.selectedBrowser.contentDocument;
-   var post = GaiaFormat._getBox().value;
-   var bFormed  = false;
+   var pBox = GaiaFormat._getBox();
+   if (!pBox)
+    return;
+   var post = pBox.value;
+   var bFormed = false;
    var selFormat = doc.getElementById('fmt_selection');
    GaiaFormat._selIndex = selFormat.value;
    GaiaFormat._Prefs.setCharPref('Favored', GaiaFormat._selIndex);
