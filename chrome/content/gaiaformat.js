@@ -496,7 +496,7 @@ var GaiaFormat =
   {
    try
    {
-    GaiaFormat._contentDoc().getElementsByName('basic_type')[0].selectedIndex = fmtStyle;
+    GaiaFormat._contentDoc().getElementsByName('basic_type')[0].value = fmtStyle;
    }
    catch(e){}
   }
