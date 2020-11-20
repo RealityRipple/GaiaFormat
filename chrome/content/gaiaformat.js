@@ -431,7 +431,7 @@ var GaiaFormat =
  {
   try
   {
-   var post  = GaiaFormat._contentDoc().getElementsByName('message').item(0);
+   var post = GaiaFormat._contentDoc().getElementsByName('message').item(0);
    if(!post)
     post = GaiaFormat._contentDoc().getElementsByName('form[comment]').item(0);
    if(!post)
@@ -446,7 +446,7 @@ var GaiaFormat =
  },
  _specialFormat: function(sIn)
  {
-  var fmtList   = GaiaFormat._formatList()[GaiaFormat._selIndex];
+  var fmtList = GaiaFormat._formatList()[GaiaFormat._selIndex];
   if (fmtList.Extras)
   {
    var fmtEItems = fmtList.ExtraItems;
@@ -475,10 +475,10 @@ var GaiaFormat =
      else if(sFind.slice(-1) === '[' && decodeURIComponent(sIn.substring(lLeft + sLeft.length)).substring(0, 1) === ']'){lLook = lLeft + 1;}
      else
      {
-      sIn   = sIn.substring(0, lLeft) + sBegin + sIn.substring(lLeft, lRight + sRight.length) + sEnd + sIn.substring(lRight + sRight.length);
-      lLook  = lRight + 1 + sBegin.length + sEnd.length;
+      sIn = sIn.substring(0, lLeft) + sBegin + sIn.substring(lLeft, lRight + sRight.length) + sEnd + sIn.substring(lRight + sRight.length);
+      lLook = lRight + 1 + sBegin.length + sEnd.length;
      }
-     lLeft  = sIn.indexOf(sLeft, lLook);
+     lLeft = sIn.indexOf(sLeft, lLook);
      lRight = sIn.indexOf(sRight, lLeft + 1);
     }
    }
