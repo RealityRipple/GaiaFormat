@@ -179,7 +179,7 @@ var GaiaFormat =
      insertElement = GaiaFormat._contentDoc().createElement('span');
      insertElement.setAttribute('style','margin: 12px 15px 0px 15px; font-size: 11px; vertical-align: middle; display: inline-block;');
      submit_find.addEventListener('click', GaiaFormat.AutoFormat, true);
-     GaiaFormat.httpRequest.register();
+     GaiaFormat_PostObserver.httpRequest.register();
     }
     else if (GaiaFormat._isNewTopic())
     {
@@ -303,8 +303,14 @@ var GaiaFormat =
  },
  pagegrabber_start: function()
  {
-  var doc = gBrowser.selectedBrowser.contentDocument;
-  GaiaFormat._pagegrabber(doc);
+  if (GaiaFormat._isGaia())
+  {
+   var doc = gBrowser.selectedBrowser.contentDocument;
+   GaiaFormat._pagegrabber(doc);
+   GaiaFormat_NavObserver.httpRequest.register();
+  }
+  else
+   GaiaFormat_NavObserver.httpRequest.unregister();
  },
  standardLoad: function()
  {
@@ -318,7 +324,12 @@ var GaiaFormat =
  bufferLoad: function()
  {
   if (GaiaFormat._isGaia())
+  {
    GaiaFormat._pagegrabber(GaiaFormat._buffer.contentDocument);
+   GaiaFormat_NavObserver.httpRequest.register();
+  }
+  else
+   GaiaFormat_NavObserver.httpRequest.unregister();
  },
  reLoad: function()
  {
@@ -704,67 +715,103 @@ var GaiaFormat =
    return true;
   }
   catch(e){}
- },
+ }
+};
+var GaiaFormat_PostObserver = {
  httpRequest:
  {
   observe: function(subject, topic, data)
   {
-   if (topic == 'http-on-modify-request')
-   {
-    var oHttp = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
-    if (oHttp.requestMethod == 'POST')
-    {
-     var uri = oHttp.URI.asciiSpec;
-     if (uri.substr(uri.indexOf('gaiaonline.com'), 43) == 'gaiaonline.com/forum/compose/ajaxentry/new/' && GaiaFormat._selIndex != 'none')
-     {
-      var fmtList   = GaiaFormat._formatList()[GaiaFormat._selIndex];
-      var sBody = GaiaFormat.getPostText(subject) + '&basic_type=' + fmtList[GaiaFormat._selIndex].Style + '&compound_type=0';
-      GaiaFormat.setPostText(subject, sBody);
-      oHttp.setRequestHeader('Content-Length', sBody.length, false);
-      oHttp.requestMethod = 'POST';
-      Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat, 'http-on-modify-request');
-     }
-    }
-   }
+   if (topic != 'http-on-modify-request')
+    return;
+   if (GaiaFormat._selIndex == 'none')
+    return;
+   var oHttp = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
+   if (oHttp.requestMethod != 'POST')
+    return;
+   var uri = oHttp.URI.asciiSpec;
+   if (uri.substr(uri.indexOf('gaiaonline.com'), 43) != 'gaiaonline.com/forum/compose/ajaxentry/new/')
+    return;
+   var fmtList = GaiaFormat._formatList()[GaiaFormat._selIndex];
+   var sBody = GaiaFormat_PostObserver.getPostText(subject) + '&basic_type=' + fmtList.Style + '&compound_type=0';
+   GaiaFormat_PostObserver.setPostText(subject, sBody);
+   oHttp.setRequestHeader('Content-Length', sBody.length, false);
+   oHttp.requestMethod = 'POST';
+   GaiaFormat_PostObserver.httpRequest.unregister();
   },
-  register: function() {Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).addObserver(GaiaFormat, 'http-on-modify-request', false);},
-  getPostText: function(subject)
+  register: function()
   {
-   var upStream = subject.QueryInterface(Components.interfaces.nsIUploadChannel).uploadStream;
-   if(upStream)
-   {
-    var seekStream = upStream.QueryInterface(Components.interfaces.nsISeekableStream);
-    var prevOffset;
-    if (seekStream)
-    {
-     prevOffset = seekStream.tell();
-     seekStream.seek(Components.interfaces.nsISeekableStream.NS_SEEK_SET, 0);
-    }
-    var text = GaiaFormat.readFromStream(upStream, true);
-    if (seekStream && prevOffset == 0)
-     seekStream.seek(Components.interfaces.nsISeekableStream.NS_SEEK_SET, 0);
-    return text;
-   }
+   Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).addObserver(GaiaFormat_PostObserver.httpRequest, 'http-on-modify-request', false);
   },
-  readFromStream: function(stream, noClose)
+  unregister: function()
   {
-   var binStream = Components.classes['@mozilla.org/binaryinputstream;1'].getService(Components.interfaces.nsIBinaryInputStream);
-   binStream.setInputStream(stream);
-   var segments = [];
-   for (var count = stream.available(); count; count = stream.available())
-    segments.push(binStream.readBytes(count));
-   if (!noClose)
-    binStream.close();
-   var text = segments.join('');
-   return text;
-  },
-  setPostText: function(subject, body)
-  {
-   var aBody = Components.classes['@mozilla.org/io/string-input-stream;1'].createInstance(Components.interfaces.nsIStringInputStream);
-   aBody.setData(body, body.length);
-   var uChan = subject.QueryInterface(Components.interfaces.nsIUploadChannel);
-   uChan.setUploadStream(aBody, 'application/x-www-form-urlencoded', -1);
+   Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat_PostObserver.httpRequest, 'http-on-modify-request');
   }
+ },
+ getPostText: function(subject)
+ {
+  var upStream = subject.QueryInterface(Components.interfaces.nsIUploadChannel).uploadStream;
+  if(upStream)
+  {
+   var seekStream = upStream.QueryInterface(Components.interfaces.nsISeekableStream);
+   var prevOffset;
+   if (seekStream)
+   {
+    prevOffset = seekStream.tell();
+    seekStream.seek(Components.interfaces.nsISeekableStream.NS_SEEK_SET, 0);
+   }
+   var text = GaiaFormat_PostObserver.readFromStream(upStream, true);
+   if (seekStream && prevOffset == 0)
+    seekStream.seek(Components.interfaces.nsISeekableStream.NS_SEEK_SET, 0);
+   return text;
+  }
+ },
+ readFromStream: function(stream, noClose)
+ {
+  var binStream = Components.classes['@mozilla.org/binaryinputstream;1'].getService(Components.interfaces.nsIBinaryInputStream);
+  binStream.setInputStream(stream);
+  var segments = [];
+  for (var count = stream.available(); count; count = stream.available())
+   segments.push(binStream.readBytes(count));
+  if (!noClose)
+   binStream.close();
+  var text = segments.join('');
+  return text;
+ },
+ setPostText: function(subject, body)
+ {
+  var aBody = Components.classes['@mozilla.org/io/string-input-stream;1'].createInstance(Components.interfaces.nsIStringInputStream);
+  aBody.setData(body, body.length);
+  var uChan = subject.QueryInterface(Components.interfaces.nsIUploadChannel);
+  uChan.setUploadStream(aBody, 'application/x-www-form-urlencoded', -1);
+ }
+};
+var GaiaFormat_NavObserver = {
+ httpRequest:
+ {
+  observe: function(subject, topic, data)
+  {
+   if (topic != 'http-on-examine-response')
+    return;
+   var oHttp = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
+   var uri = oHttp.URI.asciiSpec;
+   if (uri.indexOf('/t.') === -1)
+    return;
+   setTimeout(GaiaFormat_NavObserver.reLoad, 1777);
+  },
+  register: function()
+  {
+   Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).addObserver(GaiaFormat_NavObserver.httpRequest, 'http-on-examine-response', false);
+  },
+  unregister: function()
+  {
+   Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat_NavObserver.httpRequest, 'http-on-examine-response');
+  }
+ },
+ reLoad: function()
+ {
+  var doc = gBrowser.selectedBrowser.contentDocument;
+  GaiaFormat._pagegrabber(doc);
  }
 };
 setTimeout(GaiaFormat.reLoad, 1777);
