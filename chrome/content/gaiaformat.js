@@ -720,6 +720,7 @@ var GaiaFormat =
 var GaiaFormat_PostObserver = {
  httpRequest:
  {
+  active: false,
   observe: function(subject, topic, data)
   {
    if (topic != 'http-on-modify-request')
@@ -741,11 +742,14 @@ var GaiaFormat_PostObserver = {
   },
   register: function()
   {
+   GaiaFormat_PostObserver.httpRequest.active = true;
    Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).addObserver(GaiaFormat_PostObserver.httpRequest, 'http-on-modify-request', false);
   },
   unregister: function()
   {
-   Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat_PostObserver.httpRequest, 'http-on-modify-request');
+   if (GaiaFormat_PostObserver.httpRequest.active === true)
+    Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat_PostObserver.httpRequest, 'http-on-modify-request');
+   GaiaFormat_PostObserver.httpRequest.active = false;
   }
  },
  getPostText: function(subject)
@@ -789,6 +793,7 @@ var GaiaFormat_PostObserver = {
 var GaiaFormat_NavObserver = {
  httpRequest:
  {
+  active: false,
   observe: function(subject, topic, data)
   {
    if (topic != 'http-on-examine-response')
@@ -801,11 +806,14 @@ var GaiaFormat_NavObserver = {
   },
   register: function()
   {
+   GaiaFormat_NavObserver.httpRequest.active = true;
    Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).addObserver(GaiaFormat_NavObserver.httpRequest, 'http-on-examine-response', false);
   },
   unregister: function()
   {
-   Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat_NavObserver.httpRequest, 'http-on-examine-response');
+   if (GaiaFormat_NavObserver.httpRequest.active === true)
+    Components.classes['@mozilla.org/observer-service;1'].getService(Components.interfaces.nsIObserverService).removeObserver(GaiaFormat_NavObserver.httpRequest, 'http-on-examine-response');
+   GaiaFormat_NavObserver.httpRequest.active = false;
   }
  },
  reLoad: function()
