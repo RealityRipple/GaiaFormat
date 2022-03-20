@@ -677,7 +677,7 @@ var GaiaFormatDialog =
   {
    var nl = '\r\n';
    sFile = '<?xml version="1.0" encoding="iso-8859-1"?>' + nl;
-   sFile+= '<!DOCTYPE gaiaformat SYSTEM "https://realityripple.com/Software/Mozilla-Extensions/GaiaFormat/gfs.dtd">' + nl;
+   sFile+= '<!DOCTYPE gaiaformat SYSTEM "https://realityripple.com/Software/XUL/GaiaFormat/gfs.dtd">' + nl;
    sFile+= '<gaiaformat>' + nl;
    sFile+= ' <standard>' + nl;
    sFile+= '  <prefix>' + encodeURIComponent(myFormat.Begin) + '</prefix>' + nl;
