@@ -802,7 +802,14 @@ var GaiaFormat_NavObserver = {
    var uri = oHttp.URI.asciiSpec;
    if (uri.indexOf('/t.') === -1)
     return;
-   setTimeout(GaiaFormat_NavObserver.reLoad, 1777);
+   try
+   {
+    setTimeout(GaiaFormat_NavObserver.reLoad, 1777);
+   }
+   catch (e)
+   {
+    console.log(e);
+   }
   },
   register: function()
   {
